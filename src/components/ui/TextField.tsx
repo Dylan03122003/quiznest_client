@@ -9,6 +9,7 @@ interface TextFieldProps {
   borderColor?: string
   rounded?: string
   textInputColor?: string
+  borderFocusColor?: string
   //OTHERS
   label: string
   value?: string
@@ -30,6 +31,7 @@ const TextField = ({
   rounded = 'rounded-sm',
   textInputColor = 'text-gray-700',
   width = 'w-[300px]',
+  borderFocusColor = 'focus:border-blue-500',
 }: TextFieldProps) => {
   const [isTouched, setIsTouched] = useState<boolean>(false)
   const [text, setText] = useState<string>(value)
@@ -59,8 +61,10 @@ const TextField = ({
         name={name}
         onChange={handleChange}
         className={`px-2 py-1 mt-2 outline-none border border-solid ${
-          hasError() ? `${borderErrorColor}` : `${borderColor}`
-        }  ${rounded} ${textInputColor}  w-full`}
+          hasError()
+            ? `${borderErrorColor}`
+            : `${borderColor} ${borderFocusColor}`
+        }  ${rounded} ${textInputColor}   w-full`}
       />
       <p className={`mt-2 ${textErrorColor} h-[24px]`}>
         {hasError() ? emptyErrorMessage : ''}

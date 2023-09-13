@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { getUserInfo, storeUserInfo } from '../util/localStorageOfUser'
 
 export interface User {
   _id: string
@@ -25,19 +26,20 @@ interface UserState {
 }
 
 const initialState: UserState = {
-  currentUser: null,
+  currentUser: getUserInfo(),
 }
 
-const userSlice = createSlice({
+const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setCurrentUser: (state, action: PayloadAction<User>) => {
+    setCurrentUser: (state, action: PayloadAction<User | null>) => {
+      storeUserInfo(action.payload)
       state.currentUser = action.payload
     },
   },
 })
 
-export const { setCurrentUser } = userSlice.actions
+export const { setCurrentUser } = authSlice.actions
 
-export default userSlice.reducer
+export default authSlice.reducer

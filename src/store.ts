@@ -1,8 +1,10 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import authReducer from './slices/authSlice'
+import deckReducer from './slices/deck/deckSlice'
 
 const rootReducer = combineReducers({
   authState: authReducer,
+  deckState: deckReducer,
   // ... other reducers ...
 })
 

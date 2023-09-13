@@ -44,6 +44,10 @@ const SignUpPage = () => {
   return (
     <div className="flex items-center justify-center flex-col">
       <h2>Sign up</h2>
+      <p>
+        Register to create your first account and start exploring
+        functionalities in QuizNest
+      </p>
       <form onSubmit={handleSubmit}>
         <TextField
           label="Name"
