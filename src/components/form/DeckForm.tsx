@@ -34,7 +34,7 @@ const DeckForm = ({ open = false, onClose }: DeckFormProps) => {
   const [deckIDFromDB, setDeckIDFromDB] = useState<string>('')
 
   const createDeckMutation = useMutation(createDeck, {
-    onSuccess(data) {
+    onSuccess(data: { deck: Deck }) {
       setDeckIDFromDB(data.deck._id)
       queryClient.setQueryData<{ decks: Deck[] } | undefined>(
         ['decks'],
@@ -90,6 +90,7 @@ const DeckForm = ({ open = false, onClose }: DeckFormProps) => {
 
           {currentProcess === Process.CREATE_CARD && (
             <CardForm
+              deckIsCreated={deckIDFromDB !== ''}
               onCancel={onClose}
               onBack={handleCardBack}
               onSubmitCard={handleSubmitCard}

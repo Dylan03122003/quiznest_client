@@ -35,7 +35,7 @@ const Navbar = () => {
         <div className="hidden sm:flex items-center justify-between p-4">
           <Link to="/" className="flex items-center justify-center gap-2">
             <img src={Logo} alt="logo" className="w-10" />
-            <p>QuizNest</p>
+            <p>AnKiPro</p>
           </Link>
           <ul className="flex items-center justify-center gap-4">
             {!currentUser && (

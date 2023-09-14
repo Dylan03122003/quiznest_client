@@ -10,12 +10,18 @@ import SelectField from '../ui/SelectField'
 import TextField from '../ui/TextField'
 
 interface CardFormProps {
+  deckIsCreated: boolean
   onCancel: () => void
   onBack: () => void
   onSubmitCard: (card: NewCard) => void
 }
 
-const CardForm = ({ onCancel, onBack, onSubmitCard }: CardFormProps) => {
+const CardForm = ({
+  onCancel,
+  onBack,
+  onSubmitCard,
+  deckIsCreated = false,
+}: CardFormProps) => {
   const [selectedCardType, setSelectedCardType] = useState<CardType>(
     CardType.FlashCard,
   )
@@ -23,7 +29,6 @@ const CardForm = ({ onCancel, onBack, onSubmitCard }: CardFormProps) => {
 
   function handleCardTypeChange(cardType: CardType) {
     setSelectedCardType(cardType)
-    // Reset formData when the quiz type changes
     setFormData(null)
   }
 
@@ -42,6 +47,7 @@ const CardForm = ({ onCancel, onBack, onSubmitCard }: CardFormProps) => {
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault()
     formData && onSubmitCard(formData)
+    setFormData(null)
   }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -81,12 +87,14 @@ const CardForm = ({ onCancel, onBack, onSubmitCard }: CardFormProps) => {
               name="question"
               onChange={handleInputChange}
               label="Enter question"
+              isSubmited={formData === null}
             />
             <TextField
               width="w-full"
               name="answer"
               onChange={handleInputChange}
               label="Enter answer"
+              isSubmited={formData === null}
             />
           </>
         )}
@@ -98,23 +106,32 @@ const CardForm = ({ onCancel, onBack, onSubmitCard }: CardFormProps) => {
               name="front"
               onChange={handleInputChange}
               label="Enter front card"
+              isSubmited={formData === null}
             />
             <TextField
               width="w-full"
               name="back"
               onChange={handleInputChange}
               label="Enter back card"
+              isSubmited={formData === null}
             />
           </>
         )}
-        <div className="flex justify-between items-center">
-          <Button
-            onClick={onBack}
-            backgroundColor="bg-gray-300"
-            hoverColor="hover:bg-gray-400"
-          >
-            Back
-          </Button>
+
+        <div
+          className={`flex ${
+            deckIsCreated ? 'justify-end' : 'justify-between'
+          }  items-center`}
+        >
+          {!deckIsCreated && (
+            <Button
+              onClick={onBack}
+              backgroundColor="bg-gray-300"
+              hoverColor="hover:bg-gray-400"
+            >
+              Back
+            </Button>
+          )}
           <div className="flex items-center justify-center gap-2">
             <Button
               onClick={onCancel}
