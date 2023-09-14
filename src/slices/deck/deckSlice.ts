@@ -12,9 +12,12 @@ const cardSlice = createSlice({
     addDesk: (state, action: PayloadAction<Deck>) => {
       state.decks.push(action.payload)
     },
+    loadDecks: (state, action: PayloadAction<Deck[]>) => {
+      state.decks = action.payload
+    },
   },
 })
 
-export const { addDesk } = cardSlice.actions
+export const { addDesk, loadDecks } = cardSlice.actions
 
 export default cardSlice.reducer

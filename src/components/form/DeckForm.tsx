@@ -1,11 +1,11 @@
 import { AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
-import { useMutation } from 'react-query'
-import { useDispatch, useSelector } from 'react-redux'
+import { useMutation, useQueryClient } from 'react-query'
+import { useSelector } from 'react-redux'
 import { addCardToExistingDeck, createDeck } from '../../api/deck'
-import { addDesk } from '../../slices/deck/deckSlice'
-import { NewCard, NewDeck } from '../../slices/deck/deckTypes'
+import { Deck, NewCard, NewDeck } from '../../slices/deck/deckTypes'
 import { RootState } from '../../store'
+import { logMyError } from '../../util/logMyError'
 import Modal from '../ui/Modal'
 import CardForm from './CardForm'
 import DeckTitleForm from './DeckTitleForm'
@@ -21,8 +21,8 @@ interface DeckFormProps {
 }
 
 const DeckForm = ({ open = false, onClose }: DeckFormProps) => {
+  const queryClient = useQueryClient()
   const { currentUser } = useSelector((state: RootState) => state.authState)
-  const dispatch = useDispatch()
   const [currentProcess, setCurrentProcess] = useState<Process>(
     Process.CREATE_TITLE,
   )
@@ -35,16 +35,21 @@ const DeckForm = ({ open = false, onClose }: DeckFormProps) => {
 
   const createDeckMutation = useMutation(createDeck, {
     onSuccess(data) {
-      dispatch(addDesk(data.deck))
       setDeckIDFromDB(data.deck._id)
+      queryClient.setQueryData<{ decks: Deck[] } | undefined>(
+        ['decks'],
+        (prevData) => {
+          if (!prevData) return prevData
+          return { ...prevData, decks: [...prevData.decks, data.deck] }
+        },
+      )
+    },
+    onError(err: Error) {
+      logMyError(err, 'At DeckForm component')
     },
   })
 
-  const addCardMutation = useMutation(addCardToExistingDeck, {
-    onSuccess() {
-      //
-    },
-  })
+  const addCardMutation = useMutation(addCardToExistingDeck)
 
   function handleSubmitTitle(title: string) {
     setNewDeck((prevDeck) => ({ ...prevDeck, title }))
