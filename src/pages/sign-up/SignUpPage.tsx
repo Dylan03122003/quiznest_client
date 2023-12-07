@@ -7,7 +7,8 @@ import { signup } from '../../api/authentication'
 import Button from '../../components/ui/Button'
 import EmailField from '../../components/ui/EmailField'
 import TextField from '../../components/ui/TextField'
-import { SignUp, setCurrentUser } from '../../slices/authSlice'
+import { setCurrentUser } from '../../slices/auth/authSlice'
+import { SignUp } from '../../slices/auth/authTypes'
 
 const SignUpPage = () => {
   const navigate = useNavigate()

@@ -1,25 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { getUserInfo, storeUserInfo } from '../util/localStorageOfUser'
-
-export interface User {
-  _id: string
-  name: string
-  email: string
-  role: string
-  photo: string
-}
-
-export interface SignUp {
-  name: string
-  email: string
-  password: string
-  passwordConfirm: string
-}
-
-export interface LogIn {
-  email: string
-  password: string
-}
+import { getUserInfo, storeUserInfo } from '../../util/localStorageOfUser'
+import { User } from './authTypes'
 
 interface UserState {
   currentUser: User | null

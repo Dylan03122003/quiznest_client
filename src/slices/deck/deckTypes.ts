@@ -1,44 +1,63 @@
-export enum CardType {
-  FlashCard = 'flash card',
-  ReversedCard = 'reversed card',
-}
-
-export interface FlashCard {
-  _id: string
-  type: CardType.FlashCard
-  question: string
-  answer: string
-  deckID: string
-}
-
-export interface ReversedCard {
-  _id: string
-  type: CardType.ReversedCard
-  front: string
-  back: string
-  deckID: string
-}
-
-export type Card = FlashCard | ReversedCard
+import { User } from '../auth/authTypes'
 
 export interface Deck {
-  _id: string
+  deckID: string
+  parentDeckID?: string | null
   title: string
   userID: string
-  // cards: (FlashCard | ReversedCard)[]
+  createdAt: Date
+  updatedAt: Date
+  author: User
+  totalQuestions: number
+  parentDeck?: Deck | null
+  childDecks: Deck[]
+  questions: Question[]
 }
 
-// New Stuff
-
-export type NewCard = NewFlashCard | NewReversedCard
-
-export type NewDeck = Omit<Deck, '_id' | 'cards'> & {
-  cards: (NewFlashCard | NewReversedCard)[]
+export interface Question {
+  questionID: string
+  deckID: string
+  type: QuestionType
+  clozeCard?: ClozeCard | null
+  flashCard?: Flashcard | null
+  multipleChoices?: MultipleChoice | null
+  explanation?: string | null
+  revisedAt?: Date | null
+  createdAt: Date
+  updatedAt: Date
+  deck: Deck
 }
 
-export type NewFlashCard = Omit<FlashCard, '_id'>
+export enum QuestionType {
+  CLOZE_CARD = 'CLOZE_CARD',
+  FLASHCARD = 'FLASHCARD',
+  MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
+}
 
-export type NewReversedCard = Omit<ReversedCard, '_id'>
+export interface ClozeCard {
+  clozeCardID: string
+  questionID: string
+  content: string
+  answers: string[]
+  question: Question
+}
+
+export interface Flashcard {
+  flashcardID: string
+  questionID: string
+  content: string
+  back: string
+  question: Question
+}
+
+export interface MultipleChoice {
+  multipleChoiceID: string
+  questionID: string
+  content: string
+  choices: string[]
+  answers: string[]
+  question: Question
+}
 
 // State
 

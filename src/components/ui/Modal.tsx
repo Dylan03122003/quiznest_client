@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import React from 'react'
 import Backdrop from './Backdrop'
 type ModalProps = {
   onClose: () => void
@@ -31,7 +32,7 @@ const Modal = ({ onClose, children, className }: ModalProps) => {
   return (
     <Backdrop onClick={onClose}>
       <motion.div
-        className={`w-[500px] h-[300px] bg-white rounded-md p-5 ${className}`}
+        className={`rounded-md p-5 ${className}`}
         onClick={(e) => e.stopPropagation()}
         variants={dropIn}
         initial="hidden"

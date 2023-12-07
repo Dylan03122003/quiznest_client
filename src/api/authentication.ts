@@ -1,4 +1,4 @@
-import { LogIn, SignUp } from '../slices/authSlice'
+import { LogIn, SignUp } from '../slices/auth/authSlice'
 import { apiInstance } from './config'
 
 export const login = async (loggedInData: LogIn) => {

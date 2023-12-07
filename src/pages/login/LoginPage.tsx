@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useMutation } from 'react-query'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -7,7 +7,8 @@ import { login } from '../../api/authentication'
 import Button from '../../components/ui/Button'
 import ModernEmailField from '../../components/ui/ModernEmailField'
 import TextField from '../../components/ui/TextField'
-import { LogIn, setCurrentUser } from '../../slices/authSlice'
+import { setCurrentUser } from '../../slices/auth/authSlice'
+import { LogIn, User } from '../../slices/auth/authTypes'
 import Logo from './../../assets/img/logo.png'
 
 const LoginPage = () => {
@@ -17,6 +18,18 @@ const LoginPage = () => {
     email: '',
     password: '',
   })
+  // Unused code 1 -----------------------------------------------------------------------
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const userInfoParam = urlParams.get('userInfo')
+
+    if (userInfoParam) {
+      const userInfo: User = JSON.parse(userInfoParam)
+      dispatch(setCurrentUser(userInfo))
+      navigate('/')
+    }
+  }, [])
+  // Unused code 1 -----------------------------------------------------------------------
 
   const logInMutation = useMutation(login, {
     onSuccess(data) {
@@ -34,7 +47,17 @@ const LoginPage = () => {
       [`${event.target.name}`]: event.target.value,
     }))
   }
+  // Unused code 2 -----------------------------------------------------------------------
+  const signInWithGoogle = async () => {
+    // const response = await fetch('http://127.0.0.1:3000/request', {
+    //   method: 'post',
+    // })
+    // const data = await response.json()
+    // window.location.href = data.url
 
+    window.open('http://localhost:3000/auth/google', '_self')
+  }
+  // Unused code 2 -----------------------------------------------------------------------
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault()
     logInMutation.mutate(loggedInData)
@@ -81,6 +104,8 @@ const LoginPage = () => {
           Submit
         </Button>
       </form>
+
+      <button onClick={signInWithGoogle}>Continute with Google</button>
     </div>
   )
 }

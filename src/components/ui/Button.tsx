@@ -10,6 +10,10 @@ interface ButtonProps {
   paddingX?: string
   disabledBgColor?: string
   width?: string
+  borderColor?: string
+  my?: string
+  mt?: string
+  isSecondaryBtn?: boolean
   // Other properties
   type?: 'button' | 'submit' | 'reset'
   onClick?: () => void
@@ -18,15 +22,18 @@ interface ButtonProps {
 }
 
 const Button = ({
-  backgroundColor = 'bg-blue-500',
-  textColor = 'text-blue-50',
-  hoverColor = 'hover:bg-blue-400',
+  borderColor = 'border-transparent',
+  backgroundColor = 'bg-[#334155] dark:bg-[#0EA5E9]',
+  textColor = 'text-white',
+  hoverColor = '',
   rounded = 'rounded-md',
   disabledBgColor = 'disabled:bg-gray-300',
   paddingX = 'px-4',
   paddingY = 'py-1',
   width,
   type = 'button',
+  mt = '',
+  my = '',
   disabled = false,
   onClick,
   children,
@@ -36,7 +43,7 @@ const Button = ({
       disabled={disabled}
       type={type}
       onClick={onClick}
-      className={`${width} ${backgroundColor} ${paddingY} ${paddingX} ${textColor} ${rounded} ${hoverColor} ${disabledBgColor}`}
+      className={`font-medium border border-solid ${borderColor}  ${width} ${backgroundColor} ${paddingY} ${paddingX} ${textColor} ${rounded} ${hoverColor} ${disabledBgColor} ${mt} ${my}`}
     >
       {children}
     </button>

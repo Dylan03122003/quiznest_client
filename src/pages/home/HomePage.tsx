@@ -1,11 +1,8 @@
-import DeckList from '../../components/deck/DeckList'
+import DeckList from './DeckList'
 
 const HomePage = () => {
   return (
-    <div className="p-2">
-      <h1 className="text-center mb-10 font-bold text-blue-400 text-4xl">
-        Home
-      </h1>
+    <div className="p-2 h-screen bg-primary-light dark:bg-primary-dark">
       <DeckList />
     </div>
   )

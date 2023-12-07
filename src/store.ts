@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import authReducer from './slices/authSlice'
+import authReducer from './slices/auth/authSlice'
 import deckReducer from './slices/deck/deckSlice'
 
 const rootReducer = combineReducers({

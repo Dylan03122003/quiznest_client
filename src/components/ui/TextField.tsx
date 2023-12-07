@@ -5,11 +5,15 @@ interface TextFieldProps {
   width?: string
   textErrorColor?: string
   textLabelColor?: string
+  fontLabel?: string
   borderErrorColor?: string
   borderColor?: string
   rounded?: string
   textInputColor?: string
   borderFocusColor?: string
+  bgInputColor?: string
+  borderSize?: string
+  mb?: string
   //OTHERS
   label: string
   value?: string
@@ -34,6 +38,10 @@ const TextField = ({
   textInputColor = 'text-gray-700',
   width = 'w-[300px]',
   borderFocusColor = 'focus:border-blue-500',
+  fontLabel = '',
+  bgInputColor = 'bg-white',
+  borderSize = 'border',
+  mb,
 }: TextFieldProps) => {
   const [isTouched, setIsTouched] = useState<boolean>(false)
   const [text, setText] = useState<string>(value)
@@ -49,9 +57,11 @@ const TextField = ({
   }
 
   return (
-    <div className={`${width}`}>
+    <div className={`${width} ${mb}`}>
       <label
-        className={`${hasError() ? `${textErrorColor}` : `${textLabelColor}`} `}
+        className={`${
+          hasError() ? `${textErrorColor}` : `${textLabelColor} `
+        } ${fontLabel}`}
         htmlFor="text"
       >
         {label}
@@ -62,15 +72,17 @@ const TextField = ({
         type="text"
         name={name}
         onChange={handleChange}
-        className={`px-2 py-1 mt-2 outline-none border border-solid ${
+        className={`px-2 py-1 mt-2 outline-none ${borderSize} border-solid ${bgInputColor} ${
           hasError()
             ? `${borderErrorColor}`
             : `${borderColor} ${borderFocusColor}`
         }  ${rounded} ${textInputColor}   w-full`}
       />
-      <p className={`mt-2 ${textErrorColor} h-[24px]`}>
-        {hasError() ? emptyErrorMessage : ''}
-      </p>
+      {hasError() && (
+        <p className={`mt-2 ${textErrorColor} h-[24px]`}>
+          {hasError() ? emptyErrorMessage : ''}
+        </p>
+      )}
     </div>
   )
 }

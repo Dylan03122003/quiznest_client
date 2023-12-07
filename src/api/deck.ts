@@ -1,29 +1,96 @@
-import { NewCard, NewDeck } from '../slices/deck/deckTypes'
+import { AxiosError } from 'axios'
+import { InputQuestion } from '../components/deck/QuestionForm'
 import { apiInstance } from './config'
 
-// GET
-export const getAllDecks = async () => {
-  const response = await apiInstance.get('/api/decks')
+export enum QUERY_KEYS {
+  DECKS = 'decks',
+  USERS = 'users',
+}
+
+export const getDecks = async () => {
+  const response = await apiInstance.get(`/api/decks`)
   return response.data
 }
 
-// POST
-
-export const createDeck = async (newDeck: NewDeck) => {
-  const response = await apiInstance.post('/api/decks', newDeck)
+export const getChildrenDecks = async (parentDeckID?: string) => {
+  if (!parentDeckID) {
+    const response = await apiInstance.get(`/api/decks`)
+    return response.data
+  }
+  const response = await apiInstance.get(`/api/decks/${parentDeckID}`)
   return response.data
 }
 
-export const addCardToExistingDeck = async ({
-  card,
-  deckID,
+export const createDeck = async ({
+  title,
+  parentDeckID,
 }: {
-  card: NewCard
-  deckID: string
+  title: string
+  parentDeckID: string
 }) => {
-  const response = await apiInstance.post('/api/decks/add-card', {
-    ...card,
-    deckID,
-  })
+  const response = await apiInstance.post(`/api/decks`, { title, parentDeckID })
   return response.data
+}
+
+export const createQuestionForAnAvailableDeck = async ({
+  deckID,
+  inputQuestion,
+}: {
+  deckID: string
+  inputQuestion: InputQuestion
+}) => {
+  try {
+    const response = await apiInstance.post(`/api/decks/${deckID}`, {
+      question: inputQuestion,
+    })
+    return response.data
+  } catch (error) {
+    const err = error as AxiosError
+    console.log('ERROR: ', err.response?.data)
+  }
+}
+
+export const changeParentDeckID = async ({
+  parentDeckID,
+  childDeckID,
+}: {
+  parentDeckID: string | null
+  childDeckID: string
+}) => {
+  try {
+    const reponse = await apiInstance.post('/api/decks/change-parent', {
+      parentDeckID,
+      childDeckID,
+    })
+    return reponse.data
+  } catch (error) {
+    const err = error as AxiosError
+    console.log('ERROR: ', err.response?.data)
+  }
+}
+
+export const deleteDeck = async (deckID: string) => {
+  try {
+    const reponse = await apiInstance.delete(`/api/decks/${deckID}`)
+    return reponse.data
+  } catch (error) {
+    const err = error as AxiosError
+    console.log('ERROR: ', err.response?.data)
+  }
+}
+
+export const updateDeckTitle = async ({
+  deckID,
+  title,
+}: {
+  deckID: string
+  title: string
+}) => {
+  try {
+    const reponse = await apiInstance.patch(`/api/decks/${deckID}`, { title })
+    return reponse.data
+  } catch (error) {
+    const err = error as AxiosError
+    console.log('ERROR: ', err.response?.data)
+  }
 }
