@@ -20,6 +20,7 @@ interface DeckItemProps {
   onDragOverDeck: (e: React.DragEvent, deckID: string) => void
   onDragStartDeck: (e: React.DragEvent, deckID: string) => void
   onOpenDecks: (deckID: string) => void
+  onSetCurrentParentDeckID: (parentDeckID: string) => void
   activeDeckIDUserDragOver: string | null
   currentDrageedDeckID: string | null
   openDeckIDs: string[]
@@ -33,6 +34,7 @@ export default function DeckItem({
   activeDeckIDUserDragOver,
   currentDrageedDeckID,
   onOpenDecks,
+  onSetCurrentParentDeckID,
   openDeckIDs,
 }: DeckItemProps) {
   const queryClient = useQueryClient()
@@ -54,17 +56,73 @@ export default function DeckItem({
 
   const { mutate: deleteDeckMutation } = useMutation({
     mutationFn: deleteDeck,
+    onMutate: async (deckID: string) => {
+      await queryClient.cancelQueries({ queryKey: [QUERY_KEYS.DECKS] })
+
+      const prevData = queryClient.getQueryData(QUERY_KEYS.DECKS)
+
+      queryClient.setQueryData<{ data: Deck[] } | undefined>(
+        [QUERY_KEYS.DECKS],
+        (old) => {
+          if (old)
+            return {
+              data: old?.data.filter((d) => d.deckID !== deckID),
+            }
+          return old
+        },
+      )
+
+      return { prevData }
+    },
+    onError: (_, __, context) => {
+      queryClient.setQueryData([QUERY_KEYS.DECKS], context?.prevData)
+    },
     onSuccess() {
-      queryClient.invalidateQueries([QUERY_KEYS.DECKS])
       setOpenConfirmModal(false)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.DECKS],
+      })
     },
   })
 
   const { mutate: updateDeckTitleMutation } = useMutation({
     mutationFn: updateDeckTitle,
-    onSuccess() {
+    onMutate: async (updatedDeck: { deckID: string; title: string }) => {
       setUpdatedDeck(null)
-      queryClient.invalidateQueries([QUERY_KEYS.DECKS]) // ? I wonder if this takes so long to get the new dekcks
+
+      await queryClient.cancelQueries({ queryKey: [QUERY_KEYS.DECKS] })
+
+      const prevDecks = queryClient.getQueryData(QUERY_KEYS.DECKS)
+
+      // ! This does not update the child only work for the top level deck
+      queryClient.setQueryData<{ data: Deck[] } | undefined>(
+        [QUERY_KEYS.DECKS],
+        (old) => {
+          if (old)
+            return {
+              data: old?.data.map((d) => {
+                if (d.deckID === updatedDeck.deckID) {
+                  return { ...d, title: updatedDeck.title }
+                }
+                return d
+              }),
+            }
+          return old
+        },
+      )
+
+      return { prevDecks }
+    },
+    onError: (_, __, context) => {
+      queryClient.setQueryData([QUERY_KEYS.DECKS], context?.prevDecks)
+    },
+    onSuccess() {
+      //
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries([QUERY_KEYS.DECKS])
     },
   })
 
@@ -282,6 +340,7 @@ export default function DeckItem({
           onClick={(e) => {
             e.preventDefault()
             onOpenDecks(deck.deckID)
+            onSetCurrentParentDeckID(deck.deckID)
           }}
           type="button"
         >

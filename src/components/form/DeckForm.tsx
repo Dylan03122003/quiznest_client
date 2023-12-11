@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Modal from '../ui/Modal'
 import DeckTitleAndPathForm from './DeckTitleAndPathForm'
-import QuestionForm from './QuestionForm'
+import QuestionForm from './question_form/QuestionForm'
 
 interface DeckFormProps {
   onClose: () => void

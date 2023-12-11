@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios'
-import { InputQuestion } from '../components/deck/QuestionForm'
+import { InputQuestion } from '../components/form/question_form/QuestionForm'
 import { apiInstance } from './config'
 
 export enum QUERY_KEYS {
@@ -12,12 +12,14 @@ export const getDecks = async () => {
   return response.data
 }
 
-export const getChildrenDecks = async (parentDeckID?: string) => {
-  if (!parentDeckID) {
-    const response = await apiInstance.get(`/api/decks`)
-    return response.data
-  }
-  const response = await apiInstance.get(`/api/decks/${parentDeckID}`)
+export const getChildrenDecks = async (parentDeckID: string | null) => {
+  // if (!parentDeckID) {
+  //   const response = await apiInstance.get(`/api/decks`)
+  //   return response.data
+  // }
+  const response = await apiInstance.get(
+    `/api/decks/children-decks/${parentDeckID}`,
+  )
   return response.data
 }
 
@@ -26,7 +28,7 @@ export const createDeck = async ({
   parentDeckID,
 }: {
   title: string
-  parentDeckID: string
+  parentDeckID: string | null
 }) => {
   const response = await apiInstance.post(`/api/decks`, { title, parentDeckID })
   return response.data
@@ -88,6 +90,16 @@ export const updateDeckTitle = async ({
 }) => {
   try {
     const reponse = await apiInstance.patch(`/api/decks/${deckID}`, { title })
+    return reponse.data
+  } catch (error) {
+    const err = error as AxiosError
+    console.log('ERROR: ', err.response?.data)
+  }
+}
+
+export const getDeckDetail = async (deckID: string) => {
+  try {
+    const reponse = await apiInstance.get(`/api/decks/${deckID}`)
     return reponse.data
   } catch (error) {
     const err = error as AxiosError

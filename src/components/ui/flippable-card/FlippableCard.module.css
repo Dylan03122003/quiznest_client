@@ -1,0 +1,16 @@
+.perspective_10 {
+  perspective: 1000px;
+}
+
+.preserve_3d {
+  transform-style: preserve-3d;
+}
+
+.backface_hidden {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.rotate_y_180 {
+  transform: rotateY(180deg);
+}

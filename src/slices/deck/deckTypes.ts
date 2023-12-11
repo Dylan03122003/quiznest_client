@@ -47,6 +47,7 @@ export interface Flashcard {
   questionID: string
   content: string
   back: string
+  explanation?: string
   question: Question
 }
 

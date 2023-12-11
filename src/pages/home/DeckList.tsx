@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { QUERY_KEYS, changeParentDeckID, getDecks } from '../../api/deck'
+import { useChildDecksQuery } from '../../react_query/deck'
 import { Deck } from '../../slices/deck/deckTypes'
 import { containsChildDeck } from '../../util/deck'
 import DeckItem from './DeckItem'
 
 export default function DeckList() {
   const queryClient = useQueryClient()
-  const [decks, setDecks] = useState<Deck[] | undefined>([])
   const [openDeckIDs, setOpenDeckIDs] = useState<string[]>([])
   const [activeDeckIDUserDragOver, setActiveDeckIDUserDragOver] = useState<
     string | null
@@ -16,17 +16,45 @@ export default function DeckList() {
     string | null
   >(null)
   const [isDraggingOverRoot, setIsDraggingOverRoot] = useState<boolean>(false)
+  const [currentParentDeckID, setCurrentParentDeckID] = useState<string | null>(
+    null,
+  )
 
-  const { isLoading } = useQuery({
+  const { isLoading, data } = useQuery({
     queryKey: QUERY_KEYS.DECKS,
     queryFn: getDecks,
-    onSuccess(data) {
-      setDecks(data.data)
-    },
   })
 
-  const { mutate: changeParentDeckIDMutation } = useMutation({
+  const { data: anotherData } = useChildDecksQuery(
+    currentParentDeckID,
+    'toggle_deck',
+  )
+  const childDecks = anotherData?.data || []
+  console.log(childDecks)
+  const decks = data ? data.data : []
+
+  const {
+    mutate: changeParentDeckIDMutation,
+    isLoading: isChangingParentDeck,
+  } = useMutation({
     mutationFn: changeParentDeckID,
+    onMutate: async ({
+      parentDeckID,
+      childDeckID,
+    }: {
+      parentDeckID: string | null
+      childDeckID: string
+    }) => {
+      await queryClient.cancelQueries({ queryKey: [QUERY_KEYS.DECKS] })
+
+      const prevData = queryClient.getQueryData<{ data: Deck[] }>(
+        QUERY_KEYS.DECKS,
+      )
+      const prevDecks = prevData ? prevData.data : []
+      console.log(prevDecks, parentDeckID, childDeckID)
+
+      return { prevData }
+    },
     onSuccess() {
       queryClient.invalidateQueries([QUERY_KEYS.DECKS])
     },
@@ -101,6 +129,7 @@ export default function DeckList() {
         {decks.map((deck) => (
           <div className="" key={deck.deckID}>
             <DeckItem
+              onSetCurrentParentDeckID={setCurrentParentDeckID}
               activeDeckIDUserDragOver={activeDeckIDUserDragOver}
               currentDrageedDeckID={currentDrageedDeckID}
               deck={deck}
@@ -122,6 +151,10 @@ export default function DeckList() {
 
   if (isLoading) {
     return <div>Loading...</div>
+  }
+
+  if (isChangingParentDeck) {
+    return <div>Changing parent...</div>
   }
 
   return (

@@ -1,14 +1,15 @@
 import { FormEvent, useState } from 'react'
 import { IoFolderOutline } from 'react-icons/io5'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { QUERY_KEYS, createDeck, getChildrenDecks } from '../../api/deck'
+import { useMutation, useQueryClient } from 'react-query'
+import { QUERY_KEYS, createDeck } from '../../api/deck'
+import { useChildDecksQuery } from '../../react_query/deck'
 import { Deck } from '../../slices/deck/deckTypes'
 import Button from '../ui/Button'
 import TextField from '../ui/TextField'
 import { FormProcess } from './DeckForm'
 interface DeckPath {
   pathName: string
-  deckID: string
+  deckID: string | null
 }
 
 interface Props {
@@ -25,16 +26,15 @@ const DeckTitleAndPathForm = ({
   const queryClient = useQueryClient()
   const [title, setTitle] = useState<string>('')
   const [deckPaths, setDeckPaths] = useState<DeckPath[]>([
-    { pathName: 'All', deckID: '' },
+    { pathName: 'All', deckID: null },
   ])
-  const [parentDeckID, setParentDeckID] = useState<string>('')
-  const { data } = useQuery<{ data: Deck[] }>({
-    queryKey: ['decks', parentDeckID],
-    queryFn: () => getChildrenDecks(parentDeckID),
-  })
+  const [parentDeckID, setParentDeckID] = useState<string | null>(null)
+
+  const { data } = useChildDecksQuery(parentDeckID)
 
   const mutation = useMutation({
     mutationFn: createDeck,
+
     onSuccess(data) {
       onGetCreatedDeckID(data.data.deckID)
       onSetProcess('CREATE_QUESTION')
@@ -55,6 +55,7 @@ const DeckTitleAndPathForm = ({
       { pathName: deck.title, deckID: deck.deckID },
     ])
     setParentDeckID(deck.deckID)
+    // refetch({ queryKey: [QUERY_KEYS.DECKS, deck.deckID] })
   }
 
   const handleSubmit = (e: FormEvent) => {
@@ -106,26 +107,25 @@ const DeckTitleAndPathForm = ({
       </div>
 
       <div className="h-[200px] overflow-y-scroll">
-        {data?.data.map((deck) => (
-          <div
-            className="flex items-center justify-start gap-2 p-2 mb-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 rounded-sm"
-            key={deck.deckID}
-            onClick={() => handleDeckSelected(deck)}
-          >
-            <IoFolderOutline className="text-text-light dark:text-text-dark" />
-            <p className="text-text-light dark:text-text-dark font-medium">
-              {deck.title}
-            </p>
-          </div>
-        ))}
+        {data &&
+          data.data.map((deck) => (
+            <div
+              className="flex items-center justify-start gap-2 p-2 mb-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 rounded-sm"
+              key={deck.deckID}
+              onClick={() => handleDeckSelected(deck)}
+            >
+              <IoFolderOutline className="text-text-light dark:text-text-dark" />
+              <p className="text-text-light dark:text-text-dark font-medium">
+                {deck.title}
+              </p>
+            </div>
+          ))}
       </div>
       <div className="flex items-center justify-between mt-14">
         <Button
           onClick={onClose}
-          type="button"
-          backgroundColor="bg-gray-300"
-          hoverColor="hover:bg-gray-400 "
-          textColor="text-gray-600"
+          backgroundColor="bg-gray-100 dark:bg-primary-dark"
+          textColor="text-primary-dark dark:text-primary-light"
         >
           Cancel
         </Button>
