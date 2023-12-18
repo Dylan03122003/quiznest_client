@@ -1,3 +1,4 @@
+import { ClerkProvider } from '@clerk/clerk-react'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from 'react-query'
@@ -8,15 +9,18 @@ import './index.css'
 import store from './store.ts'
 
 const queryClient = new QueryClient()
+const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </BrowserRouter>
-    </QueryClientProvider>
+    <ClerkProvider publishableKey={clerkPubKey}>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </BrowserRouter>
+      </QueryClientProvider>
+    </ClerkProvider>
   </React.StrictMode>,
 )

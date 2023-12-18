@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import React, { useRef, useState } from 'react'
 import { GoKebabHorizontal } from 'react-icons/go'
 import { IoIosArrowForward, IoMdClose } from 'react-icons/io'
@@ -7,7 +7,8 @@ import { MdDeleteOutline } from 'react-icons/md'
 import { useMutation, useQueryClient } from 'react-query'
 import { Link } from 'react-router-dom'
 import { QUERY_KEYS, deleteDeck, updateDeckTitle } from '../../api/deck'
-import ConfirmModal from '../../components/ui/ConfirmModal'
+import Button from '../../components/ui/Button'
+import Modal from '../../components/ui/Modal'
 import Overlay from '../../components/ui/Overlay'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
 import { useWindowSize } from '../../hooks/useWindowSize'
@@ -18,21 +19,17 @@ interface DeckItemProps {
   onDropDeck: (e: React.DragEvent, deckID: string) => void
   onDragOverDeck: (e: React.DragEvent, deckID: string) => void
   onDragStartDeck: (e: React.DragEvent, deckID: string) => void
-  onOpenDecks: (deckID: string) => void
   activeDeckIDUserDragOver: string | null
   currentDrageedDeckID: string | null
-  openDeckIDs: string[]
 }
 
-export default function DeckItem({
+export default function DeckItem2({
   deck,
   onDropDeck,
   onDragOverDeck,
   onDragStartDeck,
   activeDeckIDUserDragOver,
   currentDrageedDeckID,
-  onOpenDecks,
-  openDeckIDs,
 }: DeckItemProps) {
   const queryClient = useQueryClient()
   const windowSize = useWindowSize()
@@ -46,6 +43,7 @@ export default function DeckItem({
     updatedTitle: string
   } | null>(null)
   const updatedFormRef = useRef<HTMLFormElement>(null)
+  const rotate = false
 
   useOutsideClick(updatedFormRef, () => {
     setUpdatedDeck(null)
@@ -151,6 +149,43 @@ export default function DeckItem({
         title: updatedDeck.updatedTitle,
       })
     }
+  }
+
+  const renderConfirmDeleteModal = () => {
+    return (
+      <Modal className="" onClose={() => setOpenConfirmModal(false)}>
+        <div className="bg-card-light dark:bg-card-dark rounded-md">
+          <h2 className="p-6 text-xl border-b-[1px] border-gray-400 border-solid font-semibold text-title-light dark:text-title-dark mb-2">
+            Delete deck?
+          </h2>
+          <div className="p-6">
+            <p className="text-text-light dark:text-text-dark font-medium mb-5">
+              Every child decks and questions will be deleted.
+            </p>
+            <div className="flex items-center justify-end gap-4">
+              <Button
+                backgroundColor="bg-gray-600"
+                textColor="text-white"
+                hoverColor="hover:bg-gray-500"
+                type="button"
+                onClick={() => setOpenConfirmModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                backgroundColor="bg-red-500"
+                textColor="text-white"
+                hoverColor="hover:bg-red-400"
+                type="button"
+                onClick={() => handleDeleteDeck(deck.deckID)}
+              >
+                Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Modal>
+    )
   }
 
   const renderDeckMenu = () => {
@@ -282,18 +317,7 @@ export default function DeckItem({
 
   return (
     <>
-      <AnimatePresence initial={false} mode="wait">
-        {openConfirmModal && (
-          <ConfirmModal
-            deletedID={deck.deckID}
-            onClose={() => setOpenConfirmModal(false)}
-            onDelete={handleDeleteDeck}
-            title="Delete Deck?"
-            description="Every child decks and questions will be deleted."
-          />
-        )}
-      </AnimatePresence>
-
+      {openConfirmModal && renderConfirmDeleteModal()}
       <Link
         to={`decks/${deck.deckID}`}
         onDrop={(e) => onDropDeck(e, deck.deckID)}
@@ -310,17 +334,13 @@ export default function DeckItem({
         <button
           onClick={(e) => {
             e.preventDefault()
-            onOpenDecks(deck.deckID)
           }}
           type="button"
         >
           <IoIosArrowForward
-            className={`p-1 w-6 h-6 rounded-md text-primary-dark dark:text-primary-light hover:bg-gray-200 hover:dark:bg-card-dark transition-all duration-200
-                    ${
-                      openDeckIDs.includes(deck.deckID)
-                        ? 'rotate-90 '
-                        : '-rotate-0 '
-                    }`}
+            className={`p-1 w-6 h-6 rounded-md text-primary-dark dark:text-primary-light hover:bg-gray-200 hover:dark:bg-card-dark transition-all duration-200 ${
+              rotate ? 'rotate-90' : '-rotate-0'
+            }`}
           />
         </button>
         <div>

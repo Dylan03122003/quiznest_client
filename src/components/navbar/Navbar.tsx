@@ -32,7 +32,7 @@ const Navbar = () => {
         )}
       </AnimatePresence>
 
-      <header className="bg-primary-light dark:bg-primary-dark">
+      <header className=" bg-primary-light dark:bg-primary-dark">
         {/* Desktop ----------------------------------------------------------------------------------*/}
         <div className="hidden sm:flex items-center justify-between p-4">
           <Link to="/" className="flex items-center justify-center gap-2">
@@ -100,7 +100,7 @@ const Navbar = () => {
           </ul>
         </div>
         {/* Mobile ----------------------------------------------------------------------------------*/}
-        <div className="flex sm:hidden items-center justify-around absolute bottom-0 w-full border-solid border-t-[1px] border-gray-300 dark:border-gray-700 p-2">
+        <div className="z-10 flex sm:hidden items-center justify-around fixed bottom-0 w-full border-solid border-t-[1px] border-gray-300 dark:border-gray-700 p-2 bg-primary-light dark:bg-primary-dark">
           <Link to="/" className="flex items-center justify-center flex-col">
             <GoHomeFill className="w-7 h-7 text-primary-dark dark:text-primary-light" />
             <p className="text-sm text-primary-dark dark:text-primary-light">

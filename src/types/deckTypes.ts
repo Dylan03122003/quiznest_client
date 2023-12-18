@@ -1,4 +1,4 @@
-import { User } from '../auth/authTypes'
+import { User } from '../slices/auth/authTypes'
 
 export interface Deck {
   deckID: string
@@ -21,7 +21,6 @@ export interface Question {
   clozeCard?: ClozeCard | null
   flashCard?: Flashcard | null
   multipleChoices?: MultipleChoice | null
-  explanation?: string | null
   revisedAt?: Date | null
   createdAt: Date
   updatedAt: Date
@@ -57,6 +56,7 @@ export interface MultipleChoice {
   content: string
   choices: string[]
   answers: string[]
+  explanation?: string
   question: Question
 }
 

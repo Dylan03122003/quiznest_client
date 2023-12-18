@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { QuestionType } from '../../../slices/deck/deckTypes'
+import { QuestionType } from '../../../types/deckTypes'
 import Button from '../../ui/Button'
 import ClozeTextArea from '../ClozeTextArea'
 import { InputClozeCard } from './QuestionForm'

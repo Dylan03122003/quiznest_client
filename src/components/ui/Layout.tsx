@@ -3,7 +3,7 @@ import Navbar from '../navbar/Navbar'
 
 const Layout = () => {
   return (
-    <main className="bg-custom-white">
+    <main className="bg-custom-white relative">
       <Navbar />
       <Outlet />
     </main>

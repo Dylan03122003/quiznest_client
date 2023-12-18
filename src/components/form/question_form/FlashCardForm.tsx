@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import { QuestionType } from '../../../slices/deck/deckTypes'
+import { QuestionType } from '../../../types/deckTypes'
 import Button from '../../ui/Button'
 import TextArea from '../../ui/TextArea'
 import { InputFlashCard, StateAfterCreate } from './QuestionForm'
 
+interface CreateProps {
+  usedFor: 'create'
+}
+
+interface UpdateProps {
+  usedFor: 'update'
+  oldFlashCard: InputFlashCard
+}
+
 interface Props {
   isLoading?: boolean
   stateAfterCreate?: StateAfterCreate
+  otherProps?: UpdateProps | CreateProps
   onSetStateAfterCreate?: (stateAfterCreate: StateAfterCreate) => void
   onSubmit: (flashCard: InputFlashCard) => void
   onClose?: () => void
@@ -16,15 +26,20 @@ export default function FlashCardForm({
   onSubmit,
   onClose,
   isLoading,
+  otherProps,
   stateAfterCreate,
   onSetStateAfterCreate,
 }: Props) {
-  const [flashCard, setFlashCard] = useState<InputFlashCard>({
-    type: QuestionType.FLASHCARD,
-    back: '',
-    content: '',
-    explanation: '',
-  })
+  const [flashCard, setFlashCard] = useState<InputFlashCard>(
+    otherProps && otherProps.usedFor === 'update'
+      ? otherProps.oldFlashCard
+      : {
+          type: QuestionType.FLASHCARD,
+          back: '',
+          content: '',
+          explanation: '',
+        },
+  )
 
   useEffect(() => {
     if (stateAfterCreate === 'success') {
@@ -58,6 +73,12 @@ export default function FlashCardForm({
     if (noBack) return true
 
     return false
+  }
+
+  const getButtonText = () => {
+    if (isLoading)
+      return otherProps?.usedFor === 'update' ? 'Updating...' : 'Creating...'
+    return otherProps?.usedFor === 'update' ? 'Update' : 'Create'
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -113,7 +134,7 @@ export default function FlashCardForm({
           type="submit"
           disabledBgColor="disabled:opacity-40"
         >
-          Create
+          {getButtonText()}
         </Button>
       </div>
     </form>

@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { Deck, DeckState } from './deckTypes'
+import { Deck, DeckState } from '../../types/deckTypes'
 
 const initialState: DeckState = {
   decks: [],

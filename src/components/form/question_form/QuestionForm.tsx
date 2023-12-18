@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import { useMutation, useQueryClient } from 'react-query'
-import { QUERY_KEYS, createQuestionForAnAvailableDeck } from '../../../api/deck'
-import { QuestionType } from '../../../slices/deck/deckTypes'
+import { QuestionType } from '../../../types/deckTypes'
 import SelectField from '../../ui/SelectField'
 
+import { useAddQuestionMutation } from '../../../react_query/questions'
 import ClozeCardForm from './ClozeCardForm'
 import FlashCardForm from './FlashCardForm'
 import MultipleChoiceForm from './MultipleChoiceForm'
@@ -41,7 +40,6 @@ interface Props {
 }
 
 const QuestionForm = ({ deckID, onClose }: Props) => {
-  const queryClient = useQueryClient()
   const [selectedType, setSelectedType] = useState<QuestionType>(
     QuestionType.FLASHCARD,
   )
@@ -49,16 +47,9 @@ const QuestionForm = ({ deckID, onClose }: Props) => {
     'not_make_request_yet',
   )
 
-  const { mutate: createQuestionMutation, isLoading } = useMutation({
-    mutationFn: createQuestionForAnAvailableDeck,
-    onSuccess() {
-      setStateAfterCreate('success')
-      console.log('create question successfully') // TODO: SHOW TOAST INSTEAD OF LOGGING
-      queryClient.invalidateQueries([QUERY_KEYS.DECKS])
-    },
-    onError() {
-      setStateAfterCreate('fail')
-    },
+  const { mutate: createQuestionMutation, isLoading } = useAddQuestionMutation({
+    setStateAfterCreate,
+    deckID,
   })
 
   const renderSelectedForm = () => {

@@ -1,12 +1,23 @@
 import React, { useState } from 'react'
 import { TiTick } from 'react-icons/ti'
-import { QuestionType } from '../../../slices/deck/deckTypes'
+import { QuestionType } from '../../../types/deckTypes'
 import Button from '../../ui/Button'
 import TextArea from '../../ui/TextArea'
 import TextField from '../../ui/TextField'
 import { InputMultipleChoice } from './QuestionForm'
+
+interface CreateProps {
+  usedFor: 'create'
+}
+
+interface UpdateProps {
+  usedFor: 'update'
+  oldMultipleChoice: InputMultipleChoice
+}
+
 interface Props {
   isLoading?: boolean
+  otherProps?: CreateProps | UpdateProps
   onSubmit: (multipleChoice: InputMultipleChoice) => void
   onClose?: () => void
 }
@@ -14,13 +25,24 @@ export default function MultipleChoiceForm({
   onSubmit,
   isLoading,
   onClose,
+  otherProps,
 }: Props) {
-  const [multipleChoice, setMultipleChoice] = useState<InputMultipleChoice>({
-    type: QuestionType.MULTIPLE_CHOICE,
-    answers: [],
-    choices: [],
-    content: '',
-  })
+  const [multipleChoice, setMultipleChoice] = useState<InputMultipleChoice>(
+    otherProps && otherProps.usedFor === 'update'
+      ? otherProps.oldMultipleChoice
+      : {
+          type: QuestionType.MULTIPLE_CHOICE,
+          answers: [],
+          choices: [],
+          content: '',
+        },
+  )
+
+  const getButtonText = () => {
+    if (isLoading)
+      return otherProps?.usedFor === 'update' ? 'Updating...' : 'Creating...'
+    return otherProps?.usedFor === 'update' ? 'Update' : 'Create'
+  }
 
   const handleChange = (
     e:
@@ -230,7 +252,7 @@ export default function MultipleChoiceForm({
           type="submit"
           disabledBgColor="disabled:opacity-40"
         >
-          Create
+          {getButtonText()}
         </Button>
       </div>
     </form>

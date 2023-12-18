@@ -10,7 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^4.30.0",
     "@reduxjs/toolkit": "^1.9.5",
+    "@tiptap/pm": "^2.1.13",
+    "@tiptap/react": "^2.1.13",
+    "@tiptap/starter-kit": "^2.1.13",
     "axios": "^1.5.0",
     "framer-motion": "^10.16.1",
     "react": "^18.2.0",

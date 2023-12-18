@@ -1,6 +1,7 @@
-import { useQuery } from 'react-query'
+import { useQuery, useQueryClient } from 'react-query'
 import { QUERY_KEYS, getChildrenDecks, getDeckDetail } from '../api/deck'
-import { Deck } from '../slices/deck/deckTypes'
+import { Deck } from '../types/deckTypes'
+import { appendDeck } from '../util/deck'
 
 export const useDeckQuery = (deckID: string) => {
   return useQuery<{ data: Deck }>(
@@ -12,16 +13,30 @@ export const useDeckQuery = (deckID: string) => {
   )
 }
 
-export const useChildDecksQuery = (
-  parentDeckID: string | null,
-  useFor?: 'toggle_deck' | 'deck_path',
-) => {
-  // const queryClient = useQueryClient()
+export const useChildDecksQuery = (parentDeckID: string | null) => {
   return useQuery<{ data: Deck[] }>({
     queryKey: ['decks', { parentDeckID: parentDeckID }],
     queryFn: () => getChildrenDecks(parentDeckID),
-    onSuccess() {
-      if (useFor !== 'toggle_deck') return
+  })
+}
+
+export const useToggleDecksQuery = (parentDeckID: string | null) => {
+  const queryClient = useQueryClient()
+
+  return useQuery<{ data: Deck[] }>({
+    queryKey: ['toggle_decks'],
+    queryFn: () => getChildrenDecks(parentDeckID),
+    onSuccess(data) {
+      const childDecks = data.data
+
+      const prevData = queryClient.getQueryData<{ data: Deck[] }>([
+        'toggle_decks',
+      ])
+      const prevDecks = prevData?.data || []
+      const newDecks = appendDeck(prevDecks, childDecks, parentDeckID || '')
+      newDecks
+      // console.log('child_decks: ', childDecks)
+      // console.log('newDecks: ', newDecks)
     },
   })
 }

@@ -1,13 +1,17 @@
 import { useState } from 'react'
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
+import FlippableCard from '../../components/ui/flippable-card/FlippableCard'
+import { Question } from '../../types/deckTypes'
+import BackQuestionCard from './BackQuestionCard'
+import FrontQuestionCard from './FrontQuestionCard'
+import QuestionPagination from './QuestionPagination'
 
 interface Props {
-  items: string[]
+  questions: Question[]
   rootClassName?: string
 }
 
 export default function QuestionSlider({
-  items,
+  questions,
   rootClassName = 'w-[700px] h-[500px]',
 }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -15,7 +19,7 @@ export default function QuestionSlider({
   const showPrevCard = () => {
     setCurrentIndex((prevOne) => {
       const isAtFirstCard = prevOne === 0
-      const lastIndex = items.length - 1
+      const lastIndex = questions.length - 1
       if (isAtFirstCard) return lastIndex
       return prevOne - 1
     })
@@ -23,7 +27,7 @@ export default function QuestionSlider({
 
   const showNextCard = () => {
     setCurrentIndex((prevOne) => {
-      const isAtLastCard = prevOne === items.length - 1
+      const isAtLastCard = prevOne === questions.length - 1
       if (isAtLastCard) return 0
       return prevOne + 1
     })
@@ -31,50 +35,33 @@ export default function QuestionSlider({
 
   return (
     <div className={`${rootClassName}`}>
-      <div className="w-full h-full flex overflow-hidden">
-        {items.map((item, i) => (
+      <div className="w-full h-full flex overflow-hidden ">
+        {questions.map((question, i) => (
           <div
-            key={i}
+            key={question.questionID}
             className="min-w-full  h-full"
             style={{
               translate: `${-100 * currentIndex}%`,
               transition: 'translate 300ms',
             }}
           >
-            <div className="w-full h-full bg-gray-200">{item}</div>
+            <FlippableCard
+              reset={currentIndex !== i} // always reset hidden cards
+              rootClassName="w-full h-full "
+              frontCardElement={<FrontQuestionCard question={question} />}
+              backCardElement={<BackQuestionCard question={question} />}
+            />
           </div>
         ))}
       </div>
 
-      <div className="mt-5 flex items-center justify-between">
-        <button
-          onClick={showPrevCard}
-          className="rounded-full p-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-        >
-          <IoIosArrowBack className="w-6 h-6 text-title-light dark:text-title-dark" />
-        </button>
-        <div className="flex items-center justify-center gap-2">
-          {items.map((_, index) => (
-            <button
-              className={`flex items-center justify-center p-4 rounded-full w-6 h-6 font-medium border border-solid    ${
-                currentIndex === index
-                  ? 'bg-card-dark dark:bg-card-light text-white dark:text-primary-dark border-transparent'
-                  : 'bg-card-light dark:bg-card-dark text-text-light dark:text-text-dark border-gray-200 dark:border-gray-600'
-              }`}
-              onClick={() => setCurrentIndex(index)}
-              key={index}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
-        <button
-          onClick={showNextCard}
-          className="rounded-full p-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-        >
-          <IoIosArrowForward className="w-6 h-6 text-title-light dark:text-title-dark" />
-        </button>
-      </div>
+      <QuestionPagination
+        currentIndex={currentIndex}
+        onSetCurrentIndex={setCurrentIndex}
+        onShowNextCard={showNextCard}
+        onShowPrevCard={showPrevCard}
+        questionSize={questions.length}
+      />
     </div>
   )
 }

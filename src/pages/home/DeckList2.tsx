@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { QUERY_KEYS, changeParentDeckID, getDecks } from '../../api/deck'
+import { useMutation, useQueryClient } from 'react-query'
+import { QUERY_KEYS, changeParentDeckID } from '../../api/deck'
 import { Deck } from '../../types/deckTypes'
 import { containsChildDeck } from '../../util/deck'
-import DeckItem from './DeckItem'
+import DeckItem2 from './DeckItem2'
 
-export default function DeckList() {
+export default function DeckList2() {
   const queryClient = useQueryClient()
-  const [openDeckIDs, setOpenDeckIDs] = useState<string[]>([])
   const [activeDeckIDUserDragOver, setActiveDeckIDUserDragOver] = useState<
     string | null
   >(null)
@@ -16,12 +15,7 @@ export default function DeckList() {
   >(null)
   const [isDraggingOverRoot, setIsDraggingOverRoot] = useState<boolean>(false)
 
-  const { isLoading, data } = useQuery({
-    queryKey: QUERY_KEYS.DECKS,
-    queryFn: getDecks,
-  })
-
-  const decks = data ? data.data : []
+  const decks: Deck[] = []
 
   const {
     mutate: changeParentDeckIDMutation,
@@ -102,15 +96,6 @@ export default function DeckList() {
     setActiveDeckIDUserDragOver(null)
   }
 
-  const handleOpenDecks = (openDeckID: string) => {
-    const alreadyOpened = openDeckIDs.includes(openDeckID)
-    if (alreadyOpened) {
-      setOpenDeckIDs(openDeckIDs.filter((id) => id !== openDeckID))
-    } else {
-      setOpenDeckIDs([...openDeckIDs, openDeckID])
-    }
-  }
-
   const renderDecks = (decks: Deck[]) => {
     const isAtTopLevel = decks[0] && decks[0].parentDeckID
 
@@ -118,28 +103,18 @@ export default function DeckList() {
       <div className={`${isAtTopLevel ? 'pl-4' : ''}`}>
         {decks.map((deck) => (
           <div className="" key={deck.deckID}>
-            <DeckItem
+            <DeckItem2
               activeDeckIDUserDragOver={activeDeckIDUserDragOver}
               currentDrageedDeckID={currentDrageedDeckID}
               deck={deck}
-              openDeckIDs={openDeckIDs}
               onDragOverDeck={handleDragOver}
               onDragStartDeck={handleDrag}
               onDropDeck={handleOnDrop}
-              onOpenDecks={handleOpenDecks}
             />
-            {openDeckIDs.includes(deck.deckID) &&
-              deck.childDecks &&
-              deck.childDecks.length > 0 &&
-              renderDecks(deck.childDecks)}
           </div>
         ))}
       </div>
     )
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>
   }
 
   if (isChangingParentDeck) {

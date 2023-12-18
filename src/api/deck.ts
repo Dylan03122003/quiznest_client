@@ -13,10 +13,6 @@ export const getDecks = async () => {
 }
 
 export const getChildrenDecks = async (parentDeckID: string | null) => {
-  // if (!parentDeckID) {
-  //   const response = await apiInstance.get(`/api/decks`)
-  //   return response.data
-  // }
   const response = await apiInstance.get(
     `/api/decks/children-decks/${parentDeckID}`,
   )

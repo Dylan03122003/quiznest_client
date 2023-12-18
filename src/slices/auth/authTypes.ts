@@ -6,7 +6,7 @@
 //   photo: string
 // }
 
-import { Deck } from '../deck/deckTypes'
+import { Deck } from '../../types/deckTypes'
 
 // User Type
 export interface User {
