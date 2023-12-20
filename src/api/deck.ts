@@ -16,7 +16,10 @@ export const getDecks = async (token: string) => {
       mode: 'cors',
     },
   })
-  if (response.statusText !== 'OK') throw new Error('Something went wrong!')
+  if (response.statusText !== 'OK') {
+    console.log('ERROR: ', response)
+    throw new Error('Something went wrong!')
+  }
 
   return response.data
 }
