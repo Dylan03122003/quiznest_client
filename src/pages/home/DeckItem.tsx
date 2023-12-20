@@ -11,6 +11,7 @@ import ConfirmModal from '../../components/ui/ConfirmModal'
 import Overlay from '../../components/ui/Overlay'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
 import { useWindowSize } from '../../hooks/useWindowSize'
+import { useTokenQuery } from '../../react_query/auth'
 import { Deck } from '../../types/deckTypes'
 
 interface DeckItemProps {
@@ -46,6 +47,7 @@ export default function DeckItem({
     updatedTitle: string
   } | null>(null)
   const updatedFormRef = useRef<HTMLFormElement>(null)
+  const { data: token } = useTokenQuery()
 
   useOutsideClick(updatedFormRef, () => {
     setUpdatedDeck(null)
@@ -53,7 +55,7 @@ export default function DeckItem({
 
   const { mutate: deleteDeckMutation } = useMutation({
     mutationFn: deleteDeck,
-    onMutate: async (deckID: string) => {
+    onMutate: async ({ deckID }) => {
       await queryClient.cancelQueries({ queryKey: [QUERY_KEYS.DECKS] })
 
       const prevData = queryClient.getQueryData(QUERY_KEYS.DECKS)
@@ -134,7 +136,7 @@ export default function DeckItem({
   }
 
   const handleDeleteDeck = (deckID: string) => {
-    deleteDeckMutation(deckID)
+    deleteDeckMutation({ deckID, token: token || '' })
   }
 
   const handleRenameDeck = (e: React.FormEvent) => {
@@ -149,6 +151,7 @@ export default function DeckItem({
       updateDeckTitleMutation({
         deckID: updatedDeck.deckID,
         title: updatedDeck.updatedTitle,
+        token: token || '',
       })
     }
   }

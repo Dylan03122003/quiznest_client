@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { QUERY_KEYS, changeParentDeckID, getDecks } from '../../api/deck'
+import {
+  useChangeParentDeckMutation,
+  useGetAllDecksQuery,
+} from '../../react_query/deck'
 import { Deck } from '../../types/deckTypes'
 import { containsChildDeck } from '../../util/deck'
 import DeckItem from './DeckItem'
 
 export default function DeckList() {
-  const queryClient = useQueryClient()
   const [openDeckIDs, setOpenDeckIDs] = useState<string[]>([])
   const [activeDeckIDUserDragOver, setActiveDeckIDUserDragOver] = useState<
     string | null
@@ -16,39 +17,13 @@ export default function DeckList() {
   >(null)
   const [isDraggingOverRoot, setIsDraggingOverRoot] = useState<boolean>(false)
 
-  const { isLoading, data } = useQuery({
-    queryKey: QUERY_KEYS.DECKS,
-    queryFn: getDecks,
-  })
-
+  const { isLoading, data } = useGetAllDecksQuery()
   const decks = data ? data.data : []
 
   const {
     mutate: changeParentDeckIDMutation,
     isLoading: isChangingParentDeck,
-  } = useMutation({
-    mutationFn: changeParentDeckID,
-    onMutate: async ({
-      parentDeckID,
-      childDeckID,
-    }: {
-      parentDeckID: string | null
-      childDeckID: string
-    }) => {
-      await queryClient.cancelQueries({ queryKey: [QUERY_KEYS.DECKS] })
-
-      const prevData = queryClient.getQueryData<{ data: Deck[] }>(
-        QUERY_KEYS.DECKS,
-      )
-      const prevDecks = prevData ? prevData.data : []
-      console.log(prevDecks, parentDeckID, childDeckID)
-
-      return { prevData }
-    },
-    onSuccess() {
-      queryClient.invalidateQueries([QUERY_KEYS.DECKS])
-    },
-  })
+  } = useChangeParentDeckMutation()
 
   const handleDrag = (e: React.DragEvent, deckID: string) => {
     e.dataTransfer.setData('deckID', deckID)

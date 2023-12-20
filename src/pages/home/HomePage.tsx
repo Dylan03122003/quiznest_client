@@ -1,13 +1,12 @@
-import { useSelector } from 'react-redux'
-import { RootState } from '../../store'
+import { useAuth } from '@clerk/clerk-react'
 import DeckList from './DeckList'
 
 const HomePage = () => {
-  const { currentUser } = useSelector((state: RootState) => state.authState)
+  const { isSignedIn } = useAuth()
 
   return (
     <div className="p-2 h-screen bg-primary-light dark:bg-primary-dark">
-      {currentUser && <DeckList />}
+      {isSignedIn && <DeckList />}
     </div>
   )
 }

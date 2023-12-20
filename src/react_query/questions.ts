@@ -1,3 +1,4 @@
+import { useAuth } from '@clerk/clerk-react'
 import { useMutation, useQueryClient } from 'react-query'
 import { QUERY_KEYS, createQuestionForAnAvailableDeck } from '../api/deck'
 import { deleteQuestionAPI, updateCard } from '../api/questions'
@@ -9,8 +10,18 @@ export const useUpdateCardMutation = (
   onClose?: () => void,
 ) => {
   const queryClient = useQueryClient()
+  const { getToken } = useAuth()
   return useMutation({
-    mutationFn: updateCard,
+    mutationFn: async ({
+      cardID,
+      updatedQuestion,
+    }: {
+      cardID: string
+      updatedQuestion: Question
+    }) => {
+      const token = await getToken()
+      updateCard({ cardID, updatedQuestion, token: token || '' })
+    },
     onMutate: async (data: { updatedQuestion: Question }) => {
       onClose && onClose()
 
@@ -62,10 +73,14 @@ export const useDeleteQuestionMutation = (
   onClose: () => void,
   deckID: string,
 ) => {
+  const { getToken } = useAuth()
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: deleteQuestionAPI,
+    mutationFn: async (questionID: string) => {
+      const token = await getToken()
+      deleteQuestionAPI(questionID, token || '')
+    },
     onMutate: async (questionID: string) => {
       onClose()
 

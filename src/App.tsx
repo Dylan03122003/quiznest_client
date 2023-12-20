@@ -5,8 +5,10 @@ import Layout from './components/ui/Layout'
 import DeckDetailPage from './pages/deck-detail/DeckDetailPage'
 import HomePage from './pages/home/HomePage'
 import LoginPage from './pages/login/LoginPage'
+import LoginTest from './pages/login/LoginTest'
 import DeckRevisionPage from './pages/revision'
 import SignUpPage from './pages/sign-up/SignUpPage'
+import SignUpTest from './pages/sign-up/SignUpTest'
 
 const App = () => {
   return (
@@ -24,6 +26,10 @@ const App = () => {
 
         <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/log-in" element={<LoginPage />} />
+        {/* Clerk test START */}
+        <Route path="/sign-in/*" element={<LoginTest />} />
+        <Route path="/register/*" element={<SignUpTest />} />
+        {/* Clerk test END */}
 
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

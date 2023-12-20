@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useMutation } from 'react-query'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -8,7 +8,7 @@ import Button from '../../components/ui/Button'
 import ModernEmailField from '../../components/ui/ModernEmailField'
 import TextField from '../../components/ui/TextField'
 import { setCurrentUser } from '../../slices/auth/authSlice'
-import { LogIn, User } from '../../slices/auth/authTypes'
+import { LogIn } from '../../slices/auth/authTypes'
 import Logo from './../../assets/img/logo.png'
 
 const LoginPage = () => {
@@ -18,18 +18,6 @@ const LoginPage = () => {
     email: '',
     password: '',
   })
-  // Unused code 1 -----------------------------------------------------------------------
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search)
-    const userInfoParam = urlParams.get('userInfo')
-
-    if (userInfoParam) {
-      const userInfo: User = JSON.parse(userInfoParam)
-      dispatch(setCurrentUser(userInfo))
-      navigate('/')
-    }
-  }, [])
-  // Unused code 1 -----------------------------------------------------------------------
 
   const logInMutation = useMutation(login, {
     onSuccess(data) {

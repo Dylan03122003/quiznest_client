@@ -3,6 +3,5 @@ export default function TestComponent2() {
 }
 
 function ClerkTest() {
-  //   const key = process.env.VITE_CLERK_PUBLISHABLE_KEY
   return <div></div>
 }

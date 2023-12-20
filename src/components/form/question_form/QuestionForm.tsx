@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { QuestionType } from '../../../types/deckTypes'
 import SelectField from '../../ui/SelectField'
 
+import { useTokenQuery } from '../../../react_query/auth'
 import { useAddQuestionMutation } from '../../../react_query/questions'
 import ClozeCardForm from './ClozeCardForm'
 import FlashCardForm from './FlashCardForm'
@@ -46,7 +47,7 @@ const QuestionForm = ({ deckID, onClose }: Props) => {
   const [stateAfterCreate, setStateAfterCreate] = useState<StateAfterCreate>(
     'not_make_request_yet',
   )
-
+  const { data: token } = useTokenQuery()
   const { mutate: createQuestionMutation, isLoading } = useAddQuestionMutation({
     setStateAfterCreate,
     deckID,
@@ -60,7 +61,11 @@ const QuestionForm = ({ deckID, onClose }: Props) => {
             onClose={onClose}
             isLoading={isLoading}
             onSubmit={(clozeCard) => {
-              createQuestionMutation({ deckID, inputQuestion: clozeCard })
+              createQuestionMutation({
+                deckID,
+                inputQuestion: clozeCard,
+                token: token || '',
+              })
             }}
           />
         )
@@ -72,7 +77,11 @@ const QuestionForm = ({ deckID, onClose }: Props) => {
             stateAfterCreate={stateAfterCreate}
             isLoading={isLoading}
             onSubmit={(flashCard) => {
-              createQuestionMutation({ deckID, inputQuestion: flashCard })
+              createQuestionMutation({
+                deckID,
+                inputQuestion: flashCard,
+                token: token || '',
+              })
             }}
           />
         )
@@ -82,7 +91,11 @@ const QuestionForm = ({ deckID, onClose }: Props) => {
             onClose={onClose}
             isLoading={isLoading}
             onSubmit={(multipleChoice) => {
-              createQuestionMutation({ deckID, inputQuestion: multipleChoice })
+              createQuestionMutation({
+                deckID,
+                inputQuestion: multipleChoice,
+                token: token || '',
+              })
             }}
           />
         )

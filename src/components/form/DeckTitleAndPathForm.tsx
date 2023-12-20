@@ -1,7 +1,8 @@
 import { FormEvent, useState } from 'react'
 import { IoFolderOutline } from 'react-icons/io5'
 import { useMutation, useQueryClient } from 'react-query'
-import { QUERY_KEYS, createDeck } from '../../api/deck'
+import { QUERY_KEYS, createDeckAPI } from '../../api/deck'
+import { useTokenQuery } from '../../react_query/auth'
 import { useChildDecksQuery } from '../../react_query/deck'
 import { Deck } from '../../types/deckTypes'
 import Button from '../ui/Button'
@@ -30,10 +31,11 @@ const DeckTitleAndPathForm = ({
   ])
   const [parentDeckID, setParentDeckID] = useState<string | null>(null)
 
-  const { data } = useChildDecksQuery(parentDeckID)
+  const { data: token } = useTokenQuery()
+  const { data } = useChildDecksQuery(parentDeckID, token || '')
 
   const mutation = useMutation({
-    mutationFn: createDeck,
+    mutationFn: createDeckAPI,
 
     onSuccess(data) {
       onGetCreatedDeckID(data.data.deckID)
@@ -55,13 +57,12 @@ const DeckTitleAndPathForm = ({
       { pathName: deck.title, deckID: deck.deckID },
     ])
     setParentDeckID(deck.deckID)
-    // refetch({ queryKey: [QUERY_KEYS.DECKS, deck.deckID] })
   }
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     if (!title.trim()) return
-    mutation.mutate({ title, parentDeckID })
+    mutation.mutate({ title, parentDeckID, token: token || '' })
   }
 
   return (

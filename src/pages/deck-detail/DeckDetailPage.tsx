@@ -12,6 +12,7 @@ export default function DeckDetailPage() {
   const navigateTo = useNavigate()
   const { deckID } = useParams()
   const [openAddQuestion, setOpenAddQuestion] = useState(false)
+
   const { data, isLoading } = useDeckQuery(deckID!)
   const deckDetail = data?.data
 
