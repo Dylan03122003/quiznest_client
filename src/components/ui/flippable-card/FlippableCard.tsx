@@ -33,7 +33,7 @@ export default function FlippableCard({
   }, [reset])
 
   return (
-    <div className={`${rootClassName} ${perspective_10} `}>
+    <div className={`${rootClassName} ${perspective_10}`}>
       <CSSTransition in={showFront} timeout={300} classNames="flip">
         <div
           onClick={() => setShowFront((prevOne) => !prevOne)}

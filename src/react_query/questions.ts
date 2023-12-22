@@ -109,10 +109,11 @@ export const useDeleteQuestionMutation = (
       return { prevData }
     },
     onSuccess() {
-      // TODO: show toast
+      console.log('delete question successfully')
     },
     onError(_, __, context) {
       queryClient.setQueryData([QUERY_KEYS.DECKS, deckID], context?.prevData)
+      console.log('delete question failed')
     },
     onSettled: () => {
       queryClient.invalidateQueries({
@@ -140,6 +141,7 @@ export const useAddQuestionMutation = ({
       queryClient.invalidateQueries([QUERY_KEYS.DECKS, deckID])
     },
     onError() {
+      console.log('create question failed')
       setStateAfterCreate('fail')
     },
   })

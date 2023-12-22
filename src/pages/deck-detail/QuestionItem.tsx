@@ -160,7 +160,7 @@ export default function QuestionItem({ question }: Props) {
         )}
       </AnimatePresence>
 
-      <div className="group relative mb-5 shadow-custom bg-card-light dark:bg-card-dark">
+      <div className="rounded-md group relative mb-5 shadow-custom bg-card-light dark:bg-card-dark">
         <div className="flex flex-col sm:flex-row">
           <FrontQuestionCard
             question={question}

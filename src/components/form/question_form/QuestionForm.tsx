@@ -90,6 +90,8 @@ const QuestionForm = ({ deckID, onClose }: Props) => {
           <MultipleChoiceForm
             onClose={onClose}
             isLoading={isLoading}
+            stateAfterCreate={stateAfterCreate}
+            onSetStateAfterCreate={setStateAfterCreate}
             onSubmit={(multipleChoice) => {
               createQuestionMutation({
                 deckID,

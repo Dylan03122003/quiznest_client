@@ -19,7 +19,9 @@ const DeckForm = ({ onClose, openCreateDeck }: DeckFormProps) => {
       {openCreateDeck && (
         <Modal
           className={`w-[90%] sm:w-[600px] ${
-            process === 'CREATE_QUESTION' ? 'min:h-[600px]' : 'h-[500px]'
+            process === 'CREATE_QUESTION'
+              ? 'min-h-[600px] max-h-[800px]'
+              : 'h-[500px]'
           }  bg-card-light dark:bg-card-dark`}
           onClose={onClose}
         >

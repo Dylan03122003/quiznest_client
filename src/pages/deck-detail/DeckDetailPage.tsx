@@ -5,6 +5,7 @@ import QuestionForm from '../../components/form/question_form/QuestionForm'
 import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
 import { useDeckQuery } from '../../react_query/deck'
+import DeckDetailLoading from './DeckDetailLoading'
 import QuestionSlider from './QuestionSlider'
 import QuestionsList from './QuestionsList'
 
@@ -16,7 +17,12 @@ export default function DeckDetailPage() {
   const { data, isLoading } = useDeckQuery(deckID!)
   const deckDetail = data?.data
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading)
+    return (
+      <div className="min-h-screen md:px-10 px-5 pt-10 pb-32 bg-primary-light dark:bg-primary-dark">
+        <DeckDetailLoading />
+      </div>
+    )
 
   return (
     <>
@@ -24,7 +30,7 @@ export default function DeckDetailPage() {
         {openAddQuestion && (
           <Modal
             onClose={() => setOpenAddQuestion(false)}
-            className="w-[90%] sm:w-[600px] min:h-[600px] bg-card-light dark:bg-card-dark"
+            className="w-[90%] sm:w-[600px] min-h-[500px] max-h-[800px] bg-card-light dark:bg-card-dark"
           >
             <QuestionForm
               deckID={deckID!}

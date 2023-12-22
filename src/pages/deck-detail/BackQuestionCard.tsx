@@ -7,7 +7,7 @@ interface Props {
 }
 export default function BackQuestionCard({
   question,
-  rootClassName = 'w-full h-full bg-card-light dark:bg-card-dark ',
+  rootClassName = 'rounded-md w-full h-full bg-card-light dark:bg-card-dark ',
   textSize = 'text-2xl',
 }: Props) {
   const renderContent = () => {

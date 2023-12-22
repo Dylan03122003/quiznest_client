@@ -9,7 +9,7 @@ interface Props {
 
 export default function FrontQuestionCard({
   question,
-  rootClassName = 'w-full h-full bg-card-light dark:bg-card-dark ',
+  rootClassName = 'rounded-md w-full h-full bg-card-light dark:bg-card-dark ',
   textSize = 'text-2xl',
 }: Props) {
   const renderContent = () => {
@@ -19,7 +19,7 @@ export default function FrontQuestionCard({
       case QuestionType.FLASHCARD:
         return (
           <div
-            className={`h-full w-full p-5 flex items-center justify-center ${textSize} text-title-light dark:text-title-dark`}
+            className={`h-full w-full p-5 flex items-center justify-center ${textSize} text-title-light dark:text-title-dark `}
           >
             {question.flashCard?.content}
           </div>

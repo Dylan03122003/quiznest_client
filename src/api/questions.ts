@@ -33,12 +33,17 @@ export const updateCard = async ({
 }
 
 export const deleteQuestionAPI = async (questionID: string, token: string) => {
-  const response = await apiInstance.delete(`/api/questions/${questionID}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-      mode: 'cors',
-    },
-  })
-  return response.data
+  try {
+    const response = await apiInstance.delete(`/api/questions/${questionID}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        mode: 'cors',
+      },
+    })
+    return response.data
+  } catch (error) {
+    const err = error as AxiosError
+    console.log('ERROR: ', err.response?.data)
+  }
 }

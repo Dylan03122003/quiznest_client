@@ -1,11 +1,10 @@
 import { Outlet } from 'react-router-dom'
-import TestNav from '../navbar/TestNav'
+import Navbar from '../navbar/Navbar'
 
 const Layout = () => {
   return (
     <main className="bg-custom-white relative">
-      <TestNav />
-      {/* <Navbar/> */}
+      <Navbar />
       <Outlet />
     </main>
   )

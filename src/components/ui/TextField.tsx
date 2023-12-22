@@ -20,11 +20,9 @@ interface TextFieldProps {
   name?: string
   emptyErrorMessage?: string
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
-  isSubmited?: boolean
 }
 
 const TextField = ({
-  isSubmited = false,
   label,
   onChange,
   value = '',
@@ -67,7 +65,7 @@ const TextField = ({
         {label}
       </label>
       <input
-        value={isSubmited ? '' : text}
+        value={value}
         id="text"
         type="text"
         name={name}

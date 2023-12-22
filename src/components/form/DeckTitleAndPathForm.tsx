@@ -76,6 +76,7 @@ const DeckTitleAndPathForm = ({
         textLabelColor="text-title-light dark:text-text-dark"
         bgInputColor="bg-white dark:bg-card-dark"
         emptyErrorMessage="Title can't be empty"
+        value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
 

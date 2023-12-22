@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TiTick } from 'react-icons/ti'
 import { QuestionType } from '../../../types/deckTypes'
 import Button from '../../ui/Button'
 import TextArea from '../../ui/TextArea'
 import TextField from '../../ui/TextField'
-import { InputMultipleChoice } from './QuestionForm'
+import { InputMultipleChoice, StateAfterCreate } from './QuestionForm'
 
 interface CreateProps {
   usedFor: 'create'
@@ -17,6 +17,8 @@ interface UpdateProps {
 
 interface Props {
   isLoading?: boolean
+  stateAfterCreate?: StateAfterCreate
+  onSetStateAfterCreate?: (stateAfterCreate: StateAfterCreate) => void
   otherProps?: CreateProps | UpdateProps
   onSubmit: (multipleChoice: InputMultipleChoice) => void
   onClose?: () => void
@@ -25,6 +27,8 @@ export default function MultipleChoiceForm({
   onSubmit,
   isLoading,
   onClose,
+  stateAfterCreate,
+  onSetStateAfterCreate,
   otherProps,
 }: Props) {
   const [multipleChoice, setMultipleChoice] = useState<InputMultipleChoice>(
@@ -37,6 +41,18 @@ export default function MultipleChoiceForm({
           content: '',
         },
   )
+
+  useEffect(() => {
+    if (stateAfterCreate === 'success') {
+      setMultipleChoice({
+        type: QuestionType.MULTIPLE_CHOICE,
+        answers: [],
+        choices: [],
+        content: '',
+      })
+      onSetStateAfterCreate && onSetStateAfterCreate('not_make_request_yet')
+    }
+  }, [stateAfterCreate, onSetStateAfterCreate])
 
   const getButtonText = () => {
     if (isLoading)

@@ -19,6 +19,7 @@ interface TextAreaProps {
   emptyErrorMessage?: string
   label: string
   name?: string
+  maxHeight?: number
 }
 
 const TextArea = ({
@@ -38,13 +39,17 @@ const TextArea = ({
   emptyErrorMessage = "Can't be empty",
   label,
   width = 'w-[300px]',
+  maxHeight = 200,
 }: TextAreaProps) => {
   const [isTouched, setIsTouched] = useState<boolean>(false)
   const [text, setText] = useState<string>(value)
 
   function handleAutoResize(event: ChangeEvent<HTMLTextAreaElement>) {
     event.target.style.height = `70px`
-    const scHeight = event.target.scrollHeight
+    let scHeight = event.target.scrollHeight
+    if (scHeight >= maxHeight) {
+      scHeight = maxHeight
+    }
     event.target.style.height = `${scHeight}px`
     onChange && onChange(event)
     setIsTouched(true)
@@ -62,7 +67,7 @@ const TextArea = ({
   }
 
   return (
-    <div className={`${width} ${mb}`}>
+    <div className={`${width} ${mb} `}>
       <label
         htmlFor="textarea"
         className={`${hasError() ? `${textErrorColor}` : `${textLabelColor}`} `}
@@ -76,7 +81,7 @@ const TextArea = ({
         onChange={(e) => handleAutoResize(e)}
         onMouseUp={handleTextSelect}
         placeholder={placeholder}
-        className={`border border-solid w-full p-2 mt-2 outline-none ${bgInputColor} ${rounded} ${textInputColor} ${
+        className={`border border-solid w-full p-2 mt-2 outline-none  ${bgInputColor} ${rounded} ${textInputColor} ${
           hasError() ? `${borderErrorColor}` : `${borderColor}`
         }`}
       ></textarea>

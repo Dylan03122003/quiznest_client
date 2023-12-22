@@ -1,25 +1,20 @@
+import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react'
 import { AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
 import { BsPlusCircle } from 'react-icons/bs'
 import { GoHomeFill } from 'react-icons/go'
 import { IoIosSearch } from 'react-icons/io'
-import { MdImageSearch } from 'react-icons/md'
-import { useSelector } from 'react-redux'
+import { MdImageSearch, MdLogin } from 'react-icons/md'
 import { Link } from 'react-router-dom'
-import { RootState } from '../../store'
 import DeckForm from '../form/DeckForm'
 import Button from '../ui/Button'
+
 import ColorMode from '../ui/ColorMode'
-import Overlay from '../ui/Overlay'
-import DefaultUserPhoto from '../user/DefaultUserPhoto'
-import UserMenu from '../user/UserMenu'
+
 import Logo from './../../assets/img/logo.png'
 
 const Navbar = () => {
-  const { currentUser } = useSelector((state: RootState) => state.authState)
   const [openCreateDeck, setOpenCreateDeck] = useState(false)
-  const [openUserMenu, setOpenUserMenu] = useState(false)
-  const isLoggedIn = currentUser != null
 
   return (
     <>
@@ -53,50 +48,32 @@ const Navbar = () => {
 
             <div className="h-6 w-[1px] bg-gray-200 dark:bg-gray-700"></div>
 
-            {!isLoggedIn && (
+            <SignedIn>
+              <Button onClick={() => setOpenCreateDeck(true)}>
+                Create Deck
+              </Button>
+            </SignedIn>
+
+            <SignedIn>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
+
+            <SignedOut>
               <>
                 <li>
-                  <Link to={'/log-in'}>
+                  <Link to={'/sign-in'}>
                     <Button>Log in</Button>
                   </Link>
                 </li>
                 <li>
-                  <Link to={'/sign-up'}>
+                  <Link to={'/register'}>
                     <Button>Sign up</Button>
                   </Link>
                 </li>
               </>
-            )}
-
-            {isLoggedIn && (
-              <Button onClick={() => setOpenCreateDeck(true)}>
-                Create Deck
-              </Button>
-            )}
+            </SignedOut>
 
             <ColorMode />
-
-            {isLoggedIn && (
-              <div className="relative flex items-center justify-center gap-2">
-                {!currentUser.photo && (
-                  <DefaultUserPhoto
-                    name={currentUser.name}
-                    onOpenUserMenu={() =>
-                      setOpenUserMenu((prevOne) => !prevOne)
-                    }
-                  />
-                )}
-                {openUserMenu && (
-                  <>
-                    <Overlay onClose={() => setOpenUserMenu(false)} />
-                    <UserMenu
-                      user={currentUser}
-                      className="absolute top-12 right-0 "
-                    />
-                  </>
-                )}
-              </div>
-            )}
           </ul>
         </div>
         {/* Mobile ----------------------------------------------------------------------------------*/}
@@ -122,22 +99,20 @@ const Navbar = () => {
               Posts
             </p>
           </Link>
-          {isLoggedIn && (
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
+          <SignedOut>
             <Link
-              to={'/'}
+              to={'/sign-in'}
               className="flex items-center justify-center flex-col"
             >
-              <DefaultUserPhoto
-                name={currentUser.name}
-                width="w-7"
-                height="h-7"
-                textSize="text-xs"
-              />
+              <MdLogin className="w-7 h-7 text-primary-dark dark:text-primary-light" />
               <p className="text-sm text-primary-dark dark:text-primary-light">
-                You
+                Login
               </p>
             </Link>
-          )}
+          </SignedOut>
         </div>
       </header>
     </>

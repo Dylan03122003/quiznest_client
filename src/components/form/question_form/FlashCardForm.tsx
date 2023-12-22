@@ -89,6 +89,7 @@ export default function FlashCardForm({
   return (
     <form onSubmit={handleSubmit}>
       <TextArea
+        maxHeight={180}
         textLabelColor="text-text-light dark:text-text-dark"
         bgInputColor="bg-white dark:bg-card-dark"
         textInputColor="text-text-light dark:text-text-dark"
@@ -100,6 +101,7 @@ export default function FlashCardForm({
         onChange={(e) => handleChange(e)}
       />
       <TextArea
+        maxHeight={180}
         textLabelColor="text-text-light dark:text-text-dark"
         textInputColor="text-text-light dark:text-text-dark"
         bgInputColor="bg-white dark:bg-card-dark"
@@ -111,6 +113,7 @@ export default function FlashCardForm({
         onChange={(e) => handleChange(e)}
       />
       <TextArea
+        maxHeight={70}
         textLabelColor="text-text-light dark:text-text-dark"
         textInputColor="text-text-light dark:text-text-dark"
         bgInputColor="bg-white dark:bg-card-dark"
