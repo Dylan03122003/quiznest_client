@@ -1,5 +1,5 @@
 import { Question, QuestionType } from '../../types/deckTypes'
-import { getOrdinalNumber } from '../../util/others'
+import { getOrdinalNumber, parseHTML } from '../../util/others'
 interface Props {
   question: Question
   rootClassName?: string
@@ -17,15 +17,18 @@ export default function BackQuestionCard({
       case QuestionType.FLASHCARD:
         return (
           <div
-            className={`h-full w-full p-5  flex flex-col items-center justify-center gap-2 ${textSize} text-title-light dark:text-title-dark`}
+            className={`overflow-y-auto h-full w-full p-5 ${textSize} text-title-light dark:text-title-dark`}
           >
-            <p>{question.flashCard?.back}</p>
-            {question.flashCard?.explanation && (
-              <p>
-                <span className="font-medium">Explanation: </span>{' '}
-                {question.flashCard?.explanation}
-              </p>
-            )}
+            <div className="tiptap h-full">
+              {parseHTML(question.flashCard?.back || '')}
+
+              {question.flashCard?.explanation && (
+                <>
+                  <span className="font-medium">Explanation: </span>{' '}
+                  <div>{parseHTML(question.flashCard?.explanation)}</div>
+                </>
+              )}
+            </div>
           </div>
         )
       case QuestionType.MULTIPLE_CHOICE: {
@@ -38,7 +41,7 @@ export default function BackQuestionCard({
         })
         return (
           <div
-            className={` p-5 h-full w-full flex flex-col items-start justify-center gap-3 ${textSize} text-title-light dark:text-title-dark`}
+            className={` p-5 h-full w-full flex flex-col items-center justify-center gap-3 ${textSize} text-title-light dark:text-title-dark`}
           >
             {answers && answers.map((answer, i) => <div key={i}>{answer}</div>)}
           </div>

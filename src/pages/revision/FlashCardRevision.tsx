@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { IoMdArrowRoundForward } from 'react-icons/io'
 import Button from '../../components/ui/Button'
 import { Flashcard } from '../../types/deckTypes'
+import { parseHTML } from '../../util/others'
 
 interface Props {
   flashCard: Flashcard
@@ -20,17 +21,19 @@ export default function FlashCardRevision({
   return (
     <div className="flex flex-col sm:flex-row bg-none sm:bg-card-light sm:dark:bg-card-dark sm:shadow-custom  rounded-md">
       <div className="flex-1 p-4 border-b-[1px] sm:border-b-0 sm:border-r-[1px] border-solid border-gray-200 dark:border-gray-700">
-        <div className="pl-2 mb-5 flex items-center gap-2 text-text-light dark:text-title-dark ">
-          <p>{questionOrdinal}.</p>
-          <p>{flashCard.content}</p>
+        <div className="pl-2 mb-5 flex items-start gap-2 ">
+          <p className="text-title-light dark:text-title-dark">
+            {questionOrdinal}.
+          </p>
+          <div className={'tiptap'}>{parseHTML(flashCard.content)}</div>
         </div>
 
         {showAnswer && (
-          <div className="mb-4 p-2 bg-green-50 dark:bg-green-700 rounded-md border border-solid border-green-200 dark:border-green-600">
+          <div className="mb-4 p-2 bg-green-50 dark:bg-green-800 rounded-md border border-solid border-green-200 dark:border-green-700">
             <h2 className="text-lg font-semibold text-green-700 dark:text-green-50 mb-4">
               Answer
             </h2>
-            <p className="text-text-light dark:text-white">{flashCard.back}</p>
+            <div className={'tiptap'}>{parseHTML(flashCard.back)}</div>
           </div>
         )}
 
@@ -39,9 +42,7 @@ export default function FlashCardRevision({
             <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">
               Explanation
             </h2>
-            <p className="text-text-light dark:text-text-dark">
-              {flashCard.explanation}
-            </p>
+            <div className="tiptap">{parseHTML(flashCard.explanation!)}</div>
           </div>
         )}
       </div>

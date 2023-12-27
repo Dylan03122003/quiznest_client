@@ -75,7 +75,6 @@ const QuestionForm = ({ deckID, onClose }: Props) => {
             onClose={onClose ? onClose : () => {}}
             onSetStateAfterCreate={setStateAfterCreate}
             stateAfterCreate={stateAfterCreate}
-            isLoading={isLoading}
             onSubmit={(flashCard) => {
               createQuestionMutation({
                 deckID,

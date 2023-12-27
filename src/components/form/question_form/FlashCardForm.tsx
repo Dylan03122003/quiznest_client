@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { QuestionType } from '../../../types/deckTypes'
-import Button from '../../ui/Button'
-import TextArea from '../../ui/TextArea'
+import Tiptap from '../../ui/tiptap/Tiptap'
 import { InputFlashCard, StateAfterCreate } from './QuestionForm'
 
 interface CreateProps {
@@ -14,7 +13,6 @@ interface UpdateProps {
 }
 
 interface Props {
-  isLoading?: boolean
   stateAfterCreate?: StateAfterCreate
   otherProps?: UpdateProps | CreateProps
   onSetStateAfterCreate?: (stateAfterCreate: StateAfterCreate) => void
@@ -22,14 +20,17 @@ interface Props {
   onClose?: () => void
 }
 
-export default function FlashCardForm({
+export default function FlashCardFormEPM({
   onSubmit,
   onClose,
-  isLoading,
-  otherProps,
+  otherProps = { usedFor: 'create' },
   stateAfterCreate,
   onSetStateAfterCreate,
 }: Props) {
+  const [process, setProcess] = useState<
+    'at_front' | 'at_back' | 'at_explanation'
+  >('at_front')
+
   const [flashCard, setFlashCard] = useState<InputFlashCard>(
     otherProps && otherProps.usedFor === 'update'
       ? otherProps.oldFlashCard
@@ -52,94 +53,67 @@ export default function FlashCardForm({
     }
   }, [stateAfterCreate, onSetStateAfterCreate])
 
-  const handleChange = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>,
-  ) => {
-    setFlashCard((prevData) => {
-      return { ...prevData, [`${e.target.name}`]: e.target.value }
-    })
+  const handleSubmitFrontCard = (frontHTML: string) => {
+    setFlashCard((prevOne) => ({ ...prevOne, content: frontHTML }))
+    setProcess('at_back')
   }
 
-  const isDisabledBtn = () => {
-    const noContent =
-      !flashCard.content || flashCard.content.trim().length === 0
-
-    if (noContent) return true
-
-    const noBack = !flashCard.back || flashCard.back.trim().length === 0
-
-    if (noBack) return true
-
-    return false
+  const handleSubmitBackCard = (backHTML: string) => {
+    setFlashCard((prevOne) => ({ ...prevOne, back: backHTML }))
+    setProcess('at_explanation')
   }
 
-  const getButtonText = () => {
-    if (isLoading)
-      return otherProps?.usedFor === 'update' ? 'Updating...' : 'Creating...'
-    return otherProps?.usedFor === 'update' ? 'Update' : 'Create'
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    onSubmit(flashCard)
+  const handleSubmitExplanation = (explanationHTML: string) => {
+    setFlashCard((prevOne) => ({ ...prevOne, explanation: explanationHTML }))
+    onSubmit({ ...flashCard, explanation: explanationHTML })
+    onClose && onClose()
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <TextArea
-        maxHeight={180}
-        textLabelColor="text-text-light dark:text-text-dark"
-        bgInputColor="bg-white dark:bg-card-dark"
-        textInputColor="text-text-light dark:text-text-dark"
-        label="Front"
-        width="w-full"
-        name="content"
-        mb="mb-4"
-        value={flashCard.content}
-        onChange={(e) => handleChange(e)}
-      />
-      <TextArea
-        maxHeight={180}
-        textLabelColor="text-text-light dark:text-text-dark"
-        textInputColor="text-text-light dark:text-text-dark"
-        bgInputColor="bg-white dark:bg-card-dark"
-        label="Back"
-        width="w-full"
-        mb="mb-4"
-        name="back"
-        value={flashCard.back}
-        onChange={(e) => handleChange(e)}
-      />
-      <TextArea
-        maxHeight={70}
-        textLabelColor="text-text-light dark:text-text-dark"
-        textInputColor="text-text-light dark:text-text-dark"
-        bgInputColor="bg-white dark:bg-card-dark"
-        label="Explanation"
-        width="w-full"
-        name="explanation"
-        value={flashCard.explanation}
-        onChange={(e) => handleChange(e)}
-      />
+    <>
+      {process === 'at_front' && (
+        <Tiptap
+          onSubmit={handleSubmitFrontCard}
+          content={
+            otherProps.usedFor === 'update'
+              ? otherProps.oldFlashCard.content
+              : ''
+          }
+          editorHeight="h-[300px] sm:h-[500px]"
+          label="Enter front content"
+          onCancel={onClose}
+          submitText="Continue"
+        />
+      )}
 
-      <div className="flex items-center justify-end gap-4 mt-5 ">
-        <Button
-          onClick={onClose}
-          backgroundColor="bg-gray-100 dark:bg-primary-dark"
-          textColor="text-primary-dark dark:text-primary-light"
-        >
-          Cancel
-        </Button>
-        <Button
-          disabled={isDisabledBtn() || isLoading}
-          type="submit"
-          disabledBgColor="disabled:opacity-40"
-        >
-          {getButtonText()}
-        </Button>
-      </div>
-    </form>
+      {process === 'at_back' && (
+        <Tiptap
+          onSubmit={handleSubmitBackCard}
+          content={
+            otherProps.usedFor === 'update' ? otherProps.oldFlashCard.back : ''
+          }
+          editorHeight="h-full sm:h-[500px]"
+          label="Enter back content"
+          onCancel={onClose}
+          submitText="Continue"
+        />
+      )}
+
+      {process === 'at_explanation' && (
+        <Tiptap
+          onSubmit={handleSubmitExplanation}
+          content={
+            otherProps.usedFor === 'update'
+              ? otherProps.oldFlashCard.explanation
+              : ''
+          }
+          isOptional
+          editorHeight="h-full sm:h-[500px]"
+          label="Enter explanation (optional)"
+          onCancel={onClose}
+          submitText="Submit"
+        />
+      )}
+    </>
   )
 }

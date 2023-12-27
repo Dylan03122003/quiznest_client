@@ -30,7 +30,7 @@ export default function DeckDetailPage() {
         {openAddQuestion && (
           <Modal
             onClose={() => setOpenAddQuestion(false)}
-            className="w-[90%] sm:w-[600px] min-h-[500px] max-h-[800px] bg-card-light dark:bg-card-dark"
+            className="w-[90%] sm:w-[70%] h-fit bg-card-light dark:bg-card-dark"
           >
             <QuestionForm
               deckID={deckID!}

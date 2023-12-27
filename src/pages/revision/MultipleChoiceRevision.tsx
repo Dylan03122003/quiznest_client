@@ -22,8 +22,10 @@ export default function MultipleChoiceRevision({
       <div
         className={`h-full w-full flex flex-col items-start justify-center text-title-light dark:text-title-dark`}
       >
-        <div className="flex items-start gap-2 text-text-light dark:text-title-dark ">
-          <p>{questionOrdinal}.</p>
+        <div className="flex items-start gap-2">
+          <p className="text-title-light dark:text-title-dark">
+            {questionOrdinal}.
+          </p>
           <p className="mb-3 font-semibold">{multipleChoice?.content}</p>
         </div>
         <div>

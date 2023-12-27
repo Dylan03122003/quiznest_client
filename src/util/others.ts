@@ -1,3 +1,5 @@
+import parse from 'html-react-parser'
+
 export const getOrdinalNumber = (number: number) => {
   switch (number) {
     case 1:
@@ -67,3 +69,5 @@ export const getResponsivePages = (
 
   return responsivePages
 }
+
+export const parseHTML = (html: string) => parse(html)

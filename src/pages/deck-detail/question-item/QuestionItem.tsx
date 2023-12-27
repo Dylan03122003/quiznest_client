@@ -4,14 +4,14 @@ import { GoKebabHorizontal } from 'react-icons/go'
 import { IoMdClose } from 'react-icons/io'
 import { LiaPenSolid } from 'react-icons/lia'
 import { MdDeleteOutline } from 'react-icons/md'
-import QuestionFormForUpdate from '../../components/form/question_form/QuestionFormForUpdate'
-import ConfirmModal from '../../components/ui/ConfirmModal'
-import Modal from '../../components/ui/Modal'
-import Overlay from '../../components/ui/Overlay'
-import { useDeleteQuestionMutation } from '../../react_query/questions'
-import { Question } from '../../types/deckTypes'
-import BackQuestionCard from './BackQuestionCard'
-import FrontQuestionCard from './FrontQuestionCard'
+import QuestionFormForUpdate from '../../../components/form/question_form/QuestionFormForUpdate'
+import ConfirmModal from '../../../components/ui/ConfirmModal'
+import Modal from '../../../components/ui/Modal'
+import Overlay from '../../../components/ui/Overlay'
+import { useDeleteQuestionMutation } from '../../../react_query/questions'
+import { Question } from '../../../types/deckTypes'
+import AnswerItem from './AnswerItem'
+import ContentItem from './ContentItem'
 interface Props {
   question: Question
 }
@@ -137,7 +137,7 @@ export default function QuestionItem({ question }: Props) {
       <AnimatePresence initial={false} mode="wait">
         {openUpdateModal && (
           <Modal
-            className="w-full sm:w-[600px] min:h-[600px]"
+            className="w-[90%] sm:w-[70%] h-fit"
             onClose={() => setOpenUpdateModal(false)}
           >
             <QuestionFormForUpdate
@@ -162,16 +162,8 @@ export default function QuestionItem({ question }: Props) {
 
       <div className="rounded-md group relative mb-5 shadow-custom bg-card-light dark:bg-card-dark">
         <div className="flex flex-col sm:flex-row">
-          <FrontQuestionCard
-            question={question}
-            textSize="text-base"
-            rootClassName="w-full mt-3 sm:mt-0 border-b-[1px] sm:border-b-[0] sm:border-r-[1px] border-solid border-gray-200 dark:border-gray-600"
-          />
-          <BackQuestionCard
-            question={question}
-            textSize="text-base"
-            rootClassName="w-full  "
-          />
+          <ContentItem question={question} />
+          <AnswerItem question={question} />
         </div>
 
         <button

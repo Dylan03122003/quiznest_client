@@ -1,5 +1,5 @@
 import { Question } from '../../types/deckTypes'
-import QuestionItem from './QuestionItem'
+import QuestionItem from './question-item/QuestionItem'
 
 interface Props {
   questions: Question[]

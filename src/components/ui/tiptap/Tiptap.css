@@ -1,0 +1,146 @@
+.is-active {
+  background-color: aqua;
+}
+
+.tiptap {
+  > * + * {
+    margin-top: 0.75em;
+  }
+
+  p {
+    font-size: 16px;
+    color: #5e5c7f;
+  }
+
+  ul,
+  ol {
+    padding: 0 1rem;
+  }
+
+  ul {
+    list-style: disc;
+  }
+
+  ol {
+    list-style: decimal;
+  }
+
+  li {
+    margin-bottom: 10px;
+  }
+
+  li::marker {
+    color: #374151;
+  }
+
+  li:last-child {
+    margin-bottom: 0;
+  }
+
+  h1,
+  h2,
+  h3 {
+    line-height: 1.1;
+    font-weight: 700;
+    color: #353252;
+  }
+
+  h1 {
+    font-size: 1.875em;
+  }
+
+  h2 {
+    font-size: 1.5em;
+  }
+
+  h3 {
+    font-size: 1.25em;
+  }
+
+  code {
+    font-family: Menlo, sans-serif;
+    padding: 4px;
+    border-radius: 5px;
+    /* background-color: #1e293b;
+    color: #7dd3fc; */
+    background-color: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+  }
+
+  pre {
+    background: #0d0d0d;
+    color: #fff;
+    font-family: 'JetBrainsMono', monospace;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+
+    code {
+      border: none;
+      color: inherit;
+      padding: 0;
+      background: none;
+      font-size: 0.8rem;
+    }
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  blockquote {
+    padding-left: 1rem;
+    border-left: 2px solid #e2e8f0;
+  }
+
+  hr {
+    border: none;
+    border-top: 2px solid rgba(#0d0d0d, 0.1);
+    margin: 2rem 0;
+  }
+}
+
+body.dark .tiptap p {
+  color: white;
+}
+
+body.dark .tiptap h1,
+h2,
+h3 {
+  color: white;
+}
+
+body.dark .tiptap code {
+  font-family: Menlo, sans-serif;
+  padding: 4px;
+  border-radius: 5px;
+  background-color: #111721;
+  color: #7dd3fc;
+  border: 1px solid #475569;
+}
+
+body.dark .tiptap li::marker {
+  color: #fff;
+}
+
+body.dark .tiptap pre {
+  background: #0d0d0d;
+  color: #fff;
+  font-family: 'JetBrainsMono', monospace;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+
+  code {
+    border: none;
+    color: inherit;
+    padding: 0;
+    background: none;
+    font-size: 0.8rem;
+  }
+}
+
+body.dark .tiptap blockquote {
+  padding-left: 1rem;
+  border-left: 2px solid #0f172a;
+}

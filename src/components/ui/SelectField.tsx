@@ -65,7 +65,7 @@ const SelectField = ({
             animate={{ y: 10, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
             transition={{ duration: 0.2, ease: 'easeInOut' }}
-            className={`${menuBgColor} absolute w-full p-2 rounded-sm border border-solid border-gray-300`}
+            className={`${menuBgColor} z-10 absolute w-full p-2 rounded-sm border border-solid border-gray-300`}
           >
             {options.map((option, i) => (
               <div

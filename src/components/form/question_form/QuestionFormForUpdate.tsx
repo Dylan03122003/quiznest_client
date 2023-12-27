@@ -15,8 +15,10 @@ interface Props {
 }
 
 export default function QuestionFormForUpdate({ oldQuestion, onClose }: Props) {
-  const { mutate: updateCardMutation, isLoading: isUpdating } =
-    useUpdateCardMutation(oldQuestion, onClose)
+  const { mutate: updateCardMutation } = useUpdateCardMutation(
+    oldQuestion,
+    onClose,
+  )
 
   const handleUpdateFlashCard = (
     updatedFlashCard: InputFlashCard,
@@ -97,7 +99,6 @@ export default function QuestionFormForUpdate({ oldQuestion, onClose }: Props) {
         return (
           <FlashCardForm
             onClose={onClose ? onClose : () => {}}
-            isLoading={isUpdating}
             otherProps={{ oldFlashCard, usedFor: 'update' }}
             onSubmit={(updatedFlashCard) => {
               handleSubmit(updatedFlashCard)
