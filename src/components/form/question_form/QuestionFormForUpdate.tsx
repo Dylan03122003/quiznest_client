@@ -11,12 +11,18 @@ import {
 
 interface Props {
   oldQuestion: Question
+  currentViewdDeckID: string
   onClose?: () => void
 }
 
-export default function QuestionFormForUpdate({ oldQuestion, onClose }: Props) {
+export default function QuestionFormForUpdate({
+  oldQuestion,
+  onClose,
+  currentViewdDeckID,
+}: Props) {
   const { mutate: updateCardMutation } = useUpdateCardMutation(
     oldQuestion,
+    currentViewdDeckID,
     onClose,
   )
 

@@ -4,6 +4,7 @@ import { GoKebabHorizontal } from 'react-icons/go'
 import { IoMdClose } from 'react-icons/io'
 import { LiaPenSolid } from 'react-icons/lia'
 import { MdDeleteOutline } from 'react-icons/md'
+import { useParams } from 'react-router-dom'
 import QuestionFormForUpdate from '../../../components/form/question_form/QuestionFormForUpdate'
 import ConfirmModal from '../../../components/ui/ConfirmModal'
 import Modal from '../../../components/ui/Modal'
@@ -20,12 +21,13 @@ export default function QuestionItem({ question }: Props) {
   const [openMenu, setOpenMenu] = useState(false)
   const [openUpdateModal, setOpenUpdateModal] = useState(false)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const { deckID } = useParams()
 
   const closeDeleteModal = () => setOpenDeleteModal(false)
 
   const { mutate: deleteQuestionMutation } = useDeleteQuestionMutation(
     closeDeleteModal,
-    question.deckID,
+    deckID!,
   )
 
   const handleDeleteQuestion = (questionID: string) => {
@@ -141,6 +143,7 @@ export default function QuestionItem({ question }: Props) {
             onClose={() => setOpenUpdateModal(false)}
           >
             <QuestionFormForUpdate
+              currentViewdDeckID={deckID!}
               oldQuestion={question}
               onClose={() => setOpenUpdateModal(false)}
             />

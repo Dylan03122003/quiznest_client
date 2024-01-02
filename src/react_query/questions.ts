@@ -7,6 +7,7 @@ import { Deck, Question } from '../types/deckTypes'
 
 export const useUpdateCardMutation = (
   oldQuestion: Question,
+  deckID: string,
   onClose?: () => void,
 ) => {
   const queryClient = useQueryClient()
@@ -26,11 +27,11 @@ export const useUpdateCardMutation = (
       onClose && onClose()
 
       await queryClient.cancelQueries({
-        queryKey: [QUERY_KEYS.DECKS, oldQuestion.deckID],
+        queryKey: [QUERY_KEYS.DECKS, deckID],
       })
       const prevData = queryClient.getQueryData<{ data: Deck }>([
         QUERY_KEYS.DECKS,
-        oldQuestion.deckID,
+        deckID,
       ])
 
       const newQuestions = prevData?.data.questions.map((question) => {
@@ -48,22 +49,20 @@ export const useUpdateCardMutation = (
         },
       }
 
-      queryClient.setQueryData([QUERY_KEYS.DECKS, oldQuestion.deckID], newData)
+      queryClient.setQueryData([QUERY_KEYS.DECKS, deckID], newData)
 
       return { prevData }
     },
     onSuccess: async () => {
+      console.log('Updated question successfully')
       //TODO: Show toast
     },
     onError(_, __, context) {
-      queryClient.setQueryData(
-        [QUERY_KEYS.DECKS, oldQuestion.deckID],
-        context?.prevData,
-      )
+      queryClient.setQueryData([QUERY_KEYS.DECKS, deckID], context?.prevData)
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.DECKS, oldQuestion.deckID],
+        queryKey: [QUERY_KEYS.DECKS, deckID],
       })
     },
   })
@@ -126,16 +125,19 @@ export const useDeleteQuestionMutation = (
 interface AddQuestionMutationProps {
   setStateAfterCreate: (stateAfterCreate: StateAfterCreate) => void
   deckID: string
+  onClose?: () => void
 }
 
 export const useAddQuestionMutation = ({
   setStateAfterCreate,
   deckID,
+  onClose,
 }: AddQuestionMutationProps) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: createQuestionForAnAvailableDeck,
     onSuccess() {
+      onClose && onClose()
       setStateAfterCreate('success')
       console.log('create question successfully') // TODO: SHOW TOAST INSTEAD OF LOGGING
       queryClient.invalidateQueries([QUERY_KEYS.DECKS, deckID])

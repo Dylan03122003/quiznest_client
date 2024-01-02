@@ -6,6 +6,7 @@ import {
 import { Deck } from '../../types/deckTypes'
 import { containsChildDeck } from '../../util/deck'
 import DeckItem from './DeckItem'
+import DeckListLoading from './DeckListLoading'
 
 export default function DeckList() {
   const [openDeckIDs, setOpenDeckIDs] = useState<string[]>([])
@@ -114,7 +115,7 @@ export default function DeckList() {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <DeckListLoading />
   }
 
   if (isChangingParentDeck) {

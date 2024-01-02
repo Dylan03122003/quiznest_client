@@ -33,7 +33,7 @@ const DeckForm = ({ onClose, openCreateDeck }: DeckFormProps) => {
             />
           )}
           {process === 'CREATE_QUESTION' && (
-            <QuestionForm deckID={createdDeckID} />
+            <QuestionForm deckID={createdDeckID} onClose={onClose} />
           )}
         </Modal>
       )}

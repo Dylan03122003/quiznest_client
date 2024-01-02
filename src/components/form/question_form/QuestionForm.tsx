@@ -51,6 +51,7 @@ const QuestionForm = ({ deckID, onClose }: Props) => {
   const { mutate: createQuestionMutation, isLoading } = useAddQuestionMutation({
     setStateAfterCreate,
     deckID,
+    onClose,
   })
 
   const renderSelectedForm = () => {
