@@ -6,7 +6,6 @@ import DeckDetailPage from './pages/deck-detail/DeckDetailPage'
 import HomePage from './pages/home/HomePage'
 import LoginPage from './pages/login/LoginPage'
 import LoginTest from './pages/login/LoginTest'
-import DeckRevisionPage from './pages/revision'
 import SignUpPage from './pages/sign-up/SignUpPage'
 import SignUpTest from './pages/sign-up/SignUpTest'
 
@@ -22,7 +21,7 @@ const App = () => {
           <Route path="/test2" element={<TestComponent2 />} />
         </Route>
 
-        <Route path="/decks/revision/:deckID" element={<DeckRevisionPage />} />
+        {/* <Route path="/decks/revision/:deckID" element={<DeckRevisionPage />} /> */}
 
         <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/log-in" element={<LoginPage />} />

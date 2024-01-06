@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { IoMdArrowRoundForward } from 'react-icons/io'
-import Button from '../../components/ui/Button'
-import { Flashcard } from '../../types/deckTypes'
-import { parseHTML } from '../../util/others'
+import Button from '../../../components/ui/Button'
+import { Flashcard } from '../../../types/deckTypes'
+import { parseHTML } from '../../../util/others'
 
 interface Props {
   flashCard: Flashcard

@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
+import { FaBookmark, FaRegBookmark } from 'react-icons/fa6'
 import { GoKebabHorizontal } from 'react-icons/go'
 import { IoMdClose } from 'react-icons/io'
 import { LiaPenSolid } from 'react-icons/lia'
@@ -9,10 +10,14 @@ import QuestionFormForUpdate from '../../../components/form/question_form/Questi
 import ConfirmModal from '../../../components/ui/ConfirmModal'
 import Modal from '../../../components/ui/Modal'
 import Overlay from '../../../components/ui/Overlay'
-import { useDeleteQuestionMutation } from '../../../react_query/questions'
+import {
+  useBookmarkQuestionMutation,
+  useDeleteQuestionMutation,
+} from '../../../react_query/questions'
 import { Question } from '../../../types/deckTypes'
 import AnswerItem from './AnswerItem'
 import ContentItem from './ContentItem'
+
 interface Props {
   question: Question
 }
@@ -30,8 +35,17 @@ export default function QuestionItem({ question }: Props) {
     deckID!,
   )
 
+  const { mutate: bookmarkQuestionMutation } = useBookmarkQuestionMutation(
+    deckID!,
+    () => setOpenMenu(false),
+  )
+
   const handleDeleteQuestion = (questionID: string) => {
     deleteQuestionMutation(questionID)
+  }
+
+  const handleBookmarkQuestion = async () => {
+    bookmarkQuestionMutation(question.questionID)
   }
 
   const renderQuestionMenu = () => {
@@ -45,11 +59,25 @@ export default function QuestionItem({ question }: Props) {
                 <Overlay onClose={() => setOpenMenu(false)} />
                 <motion.div
                   onClick={(e) => e.preventDefault()}
-                  initial={{ x: 100, opacity: 0 }}
-                  animate={{ x: 140, opacity: 1 }}
-                  exit={{ x: 100, opacity: 0 }}
+                  initial={{ x: 120, opacity: 0 }}
+                  animate={{ x: 160, opacity: 1 }}
+                  exit={{ x: 120, opacity: 0 }}
                   className="z-20 p-2 rounded-md absolute top-[50%] -translate-y-[50%] right-0 bg-card-light dark:bg-card-dark shadow-custom"
                 >
+                  <button
+                    type="button"
+                    onClick={handleBookmarkQuestion}
+                    className="w-full flex items-center justify-start gap-2 hover:bg-slate-100 dark:hover:bg-slate-700 py-2 px-2 rounded-md transition-colors"
+                  >
+                    {question.isBookmarked ? (
+                      <FaBookmark className="w-5 h-5 text-orange-500 dark:text-orange-300" />
+                    ) : (
+                      <FaRegBookmark className="w-5 h-5 text-orange-500 dark:text-orange-300" />
+                    )}
+                    <p className="text-lg text-orange-500 dark:text-orange-300 font-semibold">
+                      Bookmark
+                    </p>
+                  </button>
                   <button
                     type="button"
                     onClick={() => {
@@ -102,6 +130,20 @@ export default function QuestionItem({ question }: Props) {
                 </button>
               </div>
               <div>
+                <button
+                  type="button"
+                  onClick={handleBookmarkQuestion}
+                  className="w-full flex items-center justify-start gap-2 hover:bg-slate-100 dark:hover:bg-slate-700 py-2 px-2 rounded-md transition-colors"
+                >
+                  {question.isBookmarked ? (
+                    <FaBookmark className="w-4 h-4 text-text-light dark:text-white" />
+                  ) : (
+                    <FaRegBookmark className="w-4 h-4 text-text-light dark:text-white" />
+                  )}
+                  <p className="text-lg text-text-light dark:text-white font-semibold">
+                    Bookmark
+                  </p>
+                </button>
                 <button
                   type="button"
                   onClick={() => {

@@ -12,6 +12,7 @@
   "dependencies": {
     "@clerk/clerk-react": "^4.30.0",
     "@reduxjs/toolkit": "^1.9.5",
+    "@tanstack/react-query-devtools": "^5.17.1",
     "@tiptap/extension-paragraph": "^2.1.13",
     "@tiptap/pm": "^2.1.13",
     "@tiptap/react": "^2.1.13",

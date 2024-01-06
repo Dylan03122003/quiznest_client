@@ -328,10 +328,10 @@ export default function DeckItem({
         </button>
         <div>
           {renderDeckTitle()}
-          <p className="mt-1 px-2 text-text-light dark:text-text-dark text-sm">
+          {/* <p className="mt-1 px-2 text-text-light dark:text-text-dark text-sm">
             <span className="">{deck.totalQuestions}</span>{' '}
             <span className="">questions</span>
-          </p>
+          </p> */}
         </div>
 
         <div className="relative ml-auto">

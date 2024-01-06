@@ -17,6 +17,7 @@ export interface Deck {
 export interface Question {
   questionID: string
   deckID: string
+  isBookmarked: boolean
   type: QuestionType
   clozeCard?: ClozeCard | null
   flashCard?: Flashcard | null

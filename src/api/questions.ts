@@ -47,3 +47,25 @@ export const deleteQuestionAPI = async (questionID: string, token: string) => {
     console.log('ERROR: ', err.response?.data)
   }
 }
+
+export const bookmarkQuestionAPI = async (
+  questionID: string,
+  token: string,
+) => {
+  try {
+    const response = await apiInstance.get(
+      `/api/questions/${questionID}/bookmark`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          mode: 'cors',
+        },
+      },
+    )
+    return response.data
+  } catch (error) {
+    const err = error as AxiosError
+    console.log('ERROR: ', err.response?.data)
+  }
+}
