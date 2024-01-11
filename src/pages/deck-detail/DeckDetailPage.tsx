@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import QuestionForm from '../../components/form/question_form/QuestionForm'
 import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
+import Overlay from '../../components/ui/Overlay'
 import { useDeckQuery } from '../../react_query/deck'
 import DeckDetailLoading from './DeckDetailLoading'
 import QuestionSlider from './QuestionSlider'
@@ -20,6 +21,13 @@ export default function DeckDetailPage() {
 
   const { data, isLoading } = useDeckQuery(deckID!)
   const deckDetail = data?.data
+
+  const canReviseBookmarkedQuestions = () => {
+    return (
+      deckDetail &&
+      deckDetail?.questions.filter((q) => q.isBookmarked).length > 0
+    )
+  }
 
   if (isLoading)
     return (
@@ -69,22 +77,32 @@ export default function DeckDetailPage() {
                   </Button>
 
                   {openReviseMenu && (
-                    <div className="absolute top-10 z-10 w-[200px] border border-solid border-gray-200">
-                      <button
-                        type="button"
-                        className="w-full"
-                        onClick={() => setRevisionType('revise_bookmarks')}
-                      >
-                        Revise bookmarked questions
-                      </button>
-                      <button
-                        type="button"
-                        className="w-full"
-                        onClick={() => setRevisionType('revise_all')}
-                      >
-                        Revise all questions
-                      </button>
-                    </div>
+                    <>
+                      <Overlay onClose={() => setOpenReviseMenu(false)} />
+                      <div className="absolute top-10 z-10 w-[300px] border border-solid border-gray-300 rounded-sm">
+                        <button
+                          disabled={!canReviseBookmarkedQuestions()}
+                          type="button"
+                          className="w-full p-2 bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-100"
+                          onClick={() => {
+                            setRevisionType('revise_bookmarks')
+                            setOpenReviseMenu(false)
+                          }}
+                        >
+                          Revise bookmarked questions
+                        </button>
+                        <button
+                          type="button"
+                          className="w-full p-2 bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-100"
+                          onClick={() => {
+                            setRevisionType('revise_all')
+                            setOpenReviseMenu(false)
+                          }}
+                        >
+                          Revise all questions
+                        </button>
+                      </div>
+                    </>
                   )}
                 </div>
                 <Button onClick={() => setOpenAddQuestion(true)}>
@@ -104,7 +122,9 @@ export default function DeckDetailPage() {
               <div>There is no questions. Add new one!</div>
             )}
 
-            <QuestionsList questions={deckDetail?.questions || []} />
+            {deckDetail?.questions && deckDetail.questions.length > 0 && (
+              <QuestionsList questions={deckDetail?.questions || []} />
+            )}
           </div>
         </div>
       )}
