@@ -150,25 +150,25 @@ function DecksLoading() {
         width="w-full"
         height="h-[40px]"
         className="mb-2 rounded-sm"
-        backgroundDark="bg-slate-700"
+        backgroundDark="dark:bg-slate-700"
       />
       <Skeloton
         width="w-full"
         height="h-[40px]"
         className="mb-2 rounded-sm"
-        backgroundDark="bg-slate-700"
+        backgroundDark="dark:bg-slate-700"
       />
       <Skeloton
         width="w-full"
         height="h-[40px]"
         className="mb-2 rounded-sm"
-        backgroundDark="bg-slate-700"
+        backgroundDark="dark:bg-slate-700"
       />
       <Skeloton
         width="w-full"
         height="h-[40px]"
         className="mb-2 rounded-sm"
-        backgroundDark="bg-slate-700"
+        backgroundDark="dark:bg-slate-700"
       />
     </div>
   )
