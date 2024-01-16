@@ -4,14 +4,16 @@ import { GoKebabHorizontal } from 'react-icons/go'
 import { IoIosArrowForward, IoMdClose } from 'react-icons/io'
 import { LiaPenSolid } from 'react-icons/lia'
 import { MdDeleteOutline } from 'react-icons/md'
-import { useMutation, useQueryClient } from 'react-query'
 import { Link } from 'react-router-dom'
-import { QUERY_KEYS, deleteDeck, updateDeckTitle } from '../../api/deck'
 import ConfirmModal from '../../components/ui/ConfirmModal'
 import Overlay from '../../components/ui/Overlay'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
 import { useWindowSize } from '../../hooks/useWindowSize'
 import { useTokenQuery } from '../../react_query/auth'
+import {
+  useDeleteDeckMutation,
+  useUpdateDeckTitleMutation,
+} from '../../react_query/deck'
 import { Deck } from '../../types/deckTypes'
 
 interface DeckItemProps {
@@ -35,7 +37,6 @@ export default function DeckItem({
   onOpenDecks,
   openDeckIDs,
 }: DeckItemProps) {
-  const queryClient = useQueryClient()
   const windowSize = useWindowSize()
   const [toggleDeck, setToggleDeckID] = useState<{
     deckID: string
@@ -53,77 +54,12 @@ export default function DeckItem({
     setUpdatedDeck(null)
   })
 
-  const { mutate: deleteDeckMutation } = useMutation({
-    mutationFn: deleteDeck,
-    onMutate: async ({ deckID }) => {
-      await queryClient.cancelQueries({ queryKey: [QUERY_KEYS.DECKS] })
+  const { mutate: deleteDeckMutation } = useDeleteDeckMutation(() =>
+    setOpenConfirmModal(false),
+  )
 
-      const prevData = queryClient.getQueryData(QUERY_KEYS.DECKS)
-
-      queryClient.setQueryData<{ data: Deck[] } | undefined>(
-        [QUERY_KEYS.DECKS],
-        (old) => {
-          if (old)
-            return {
-              data: old?.data.filter((d) => d.deckID !== deckID),
-            }
-          return old
-        },
-      )
-
-      return { prevData }
-    },
-    onError: (_, __, context) => {
-      queryClient.setQueryData([QUERY_KEYS.DECKS], context?.prevData)
-    },
-    onSuccess() {
-      setOpenConfirmModal(false)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.DECKS],
-      })
-    },
-  })
-
-  const { mutate: updateDeckTitleMutation } = useMutation({
-    mutationFn: updateDeckTitle,
-    onMutate: async (updatedDeck: { deckID: string; title: string }) => {
-      setUpdatedDeck(null)
-
-      await queryClient.cancelQueries({ queryKey: [QUERY_KEYS.DECKS] })
-
-      const prevDecks = queryClient.getQueryData(QUERY_KEYS.DECKS)
-
-      // ! This does not update the child only work for the top level deck
-      queryClient.setQueryData<{ data: Deck[] } | undefined>(
-        [QUERY_KEYS.DECKS],
-        (old) => {
-          if (old)
-            return {
-              data: old?.data.map((d) => {
-                if (d.deckID === updatedDeck.deckID) {
-                  return { ...d, title: updatedDeck.title }
-                }
-                return d
-              }),
-            }
-          return old
-        },
-      )
-
-      return { prevDecks }
-    },
-    onError: (_, __, context) => {
-      queryClient.setQueryData([QUERY_KEYS.DECKS], context?.prevDecks)
-    },
-    onSuccess() {
-      //
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries([QUERY_KEYS.DECKS])
-    },
-  })
+  const { mutate: updateDeckTitleMutation } =
+    useUpdateDeckTitleMutation(setUpdatedDeck)
 
   const closeDeckMenu = (e: React.MouseEvent) => {
     e.preventDefault()

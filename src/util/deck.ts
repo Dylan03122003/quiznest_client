@@ -70,3 +70,74 @@ export function appendDeck(
 
   return updatedDecks
 }
+
+export const findAndUpdateTitle = (
+  deckList: Deck[],
+  deckID: string,
+  updatedTitle: string,
+): Deck[] => {
+  for (let i = 0; i < deckList.length; i++) {
+    const currentDeck = deckList[i]
+
+    if (currentDeck.deckID === deckID) {
+      // Update the title if the deck is found
+      return [
+        ...deckList.slice(0, i),
+        { ...currentDeck, title: updatedTitle },
+        ...deckList.slice(i + 1),
+      ]
+    }
+
+    if (currentDeck.childDecks && currentDeck.childDecks.length > 0) {
+      // Recursively search through child decks
+      const updatedChildDecks = findAndUpdateTitle(
+        currentDeck.childDecks,
+        deckID,
+        updatedTitle,
+      )
+
+      if (updatedChildDecks !== currentDeck.childDecks) {
+        // If child decks were updated, return a new deck with the updated child decks
+        return [
+          ...deckList.slice(0, i),
+          { ...currentDeck, childDecks: updatedChildDecks },
+          ...deckList.slice(i + 1),
+        ]
+      }
+    }
+  }
+
+  // If the deckID is not found, return the original deckList
+  return deckList
+}
+
+export const findAndRemoveDeck = (deckList: Deck[], deckID: string): Deck[] => {
+  for (let i = 0; i < deckList.length; i++) {
+    const currentDeck = deckList[i]
+
+    if (currentDeck.deckID === deckID) {
+      // Remove the deck if found
+      return [...deckList.slice(0, i), ...deckList.slice(i + 1)]
+    }
+
+    if (currentDeck.childDecks && currentDeck.childDecks.length > 0) {
+      // Recursively search through child decks
+      const updatedChildDecks = findAndRemoveDeck(
+        currentDeck.childDecks,
+        deckID,
+      )
+
+      if (updatedChildDecks !== currentDeck.childDecks) {
+        // If child decks were updated, return a new deck with the updated child decks
+        return [
+          ...deckList.slice(0, i),
+          { ...currentDeck, childDecks: updatedChildDecks },
+          ...deckList.slice(i + 1),
+        ]
+      }
+    }
+  }
+
+  // If the deckID is not found, return the original deckList
+  return deckList
+}

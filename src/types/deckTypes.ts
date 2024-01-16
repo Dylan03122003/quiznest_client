@@ -60,9 +60,3 @@ export interface MultipleChoice {
   explanation?: string
   question: Question
 }
-
-// State
-
-export interface DeckState {
-  decks: Deck[]
-}

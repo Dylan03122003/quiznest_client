@@ -6,6 +6,7 @@ import { useTokenQuery } from '../../react_query/auth'
 import { useChildDecksQuery } from '../../react_query/deck'
 import { Deck } from '../../types/deckTypes'
 import Button from '../ui/Button'
+import Skeloton from '../ui/Skeloton'
 import TextField from '../ui/TextField'
 import { FormProcess } from './DeckForm'
 interface DeckPath {
@@ -32,7 +33,7 @@ const DeckTitleAndPathForm = ({
   const [parentDeckID, setParentDeckID] = useState<string | null>(null)
 
   const { data: token } = useTokenQuery()
-  const { data } = useChildDecksQuery(parentDeckID, token || '')
+  const { data, isLoading } = useChildDecksQuery(parentDeckID, token || '')
 
   const mutation = useMutation({
     mutationFn: createDeckAPI,
@@ -108,21 +109,24 @@ const DeckTitleAndPathForm = ({
         </div>
       </div>
 
-      <div className="h-[200px] overflow-y-scroll">
-        {data &&
-          data.data.map((deck) => (
-            <div
-              className="flex items-center justify-start gap-2 p-2 mb-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 rounded-sm"
-              key={deck.deckID}
-              onClick={() => handleDeckSelected(deck)}
-            >
-              <IoFolderOutline className="text-text-light dark:text-text-dark" />
-              <p className="text-text-light dark:text-text-dark font-medium">
-                {deck.title}
-              </p>
-            </div>
-          ))}
-      </div>
+      {isLoading && <DecksLoading />}
+      {!isLoading && (
+        <div className="h-[200px] overflow-y-auto ">
+          {data &&
+            data.data.map((deck) => (
+              <div
+                className="flex items-center justify-start gap-2 p-2 mb-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 rounded-sm"
+                key={deck.deckID}
+                onClick={() => handleDeckSelected(deck)}
+              >
+                <IoFolderOutline className="text-text-light dark:text-text-dark" />
+                <p className="text-text-light dark:text-text-dark font-medium">
+                  {deck.title}
+                </p>
+              </div>
+            ))}
+        </div>
+      )}
       <div className="flex items-center justify-between mt-14">
         <Button
           onClick={onClose}
@@ -138,3 +142,34 @@ const DeckTitleAndPathForm = ({
 }
 
 export default DeckTitleAndPathForm
+
+function DecksLoading() {
+  return (
+    <div className="h-[200px]">
+      <Skeloton
+        width="w-full"
+        height="h-[40px]"
+        className="mb-2 rounded-sm"
+        backgroundDark="bg-slate-700"
+      />
+      <Skeloton
+        width="w-full"
+        height="h-[40px]"
+        className="mb-2 rounded-sm"
+        backgroundDark="bg-slate-700"
+      />
+      <Skeloton
+        width="w-full"
+        height="h-[40px]"
+        className="mb-2 rounded-sm"
+        backgroundDark="bg-slate-700"
+      />
+      <Skeloton
+        width="w-full"
+        height="h-[40px]"
+        className="mb-2 rounded-sm"
+        backgroundDark="bg-slate-700"
+      />
+    </div>
+  )
+}

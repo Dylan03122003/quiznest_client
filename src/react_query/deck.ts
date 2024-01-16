@@ -3,11 +3,14 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 import {
   QUERY_KEYS,
   changeParentDeckID,
+  deleteDeck,
   getChildrenDecks,
   getDeckDetail,
   getDecks,
+  updateDeckTitle,
 } from '../api/deck'
 import { Deck } from '../types/deckTypes'
+import { findAndRemoveDeck, findAndUpdateTitle } from '../util/deck'
 
 export const useGetAllDecksQuery = () => {
   const { getToken } = useAuth()
@@ -47,6 +50,91 @@ export const useChildDecksQuery = (
   })
 }
 
+export const useUpdateDeckTitleMutation = (
+  onCloseUpdate: (updatedDeck: null) => void,
+) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: updateDeckTitle,
+    onMutate: async (updatedDeck: { deckID: string; title: string }) => {
+      onCloseUpdate(null)
+
+      await queryClient.cancelQueries({ queryKey: [QUERY_KEYS.DECKS] })
+
+      const prevData = queryClient.getQueryData<{ data: Deck[] }>(
+        QUERY_KEYS.DECKS,
+      )
+      const prevDecks = prevData?.data
+
+      const updatedDecks = findAndUpdateTitle(
+        prevDecks || [],
+        updatedDeck.deckID,
+        updatedDeck.title,
+      )
+
+      const updatedData = {
+        ...prevData,
+        data: updatedDecks,
+      }
+      queryClient.setQueryData([QUERY_KEYS.DECKS], updatedData)
+
+      return { prevDecks }
+    },
+    onError: (_, __, context) => {
+      queryClient.setQueryData([QUERY_KEYS.DECKS], context?.prevDecks)
+    },
+    onSuccess() {
+      console.log('Updated deck title successfully')
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries([QUERY_KEYS.DECKS])
+    },
+  })
+}
+
+export const useDeleteDeckMutation = (
+  closeConfirmModal: (open: boolean) => void,
+) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: deleteDeck,
+    onMutate: async ({ deckID }) => {
+      closeConfirmModal(false)
+
+      await queryClient.cancelQueries({ queryKey: [QUERY_KEYS.DECKS] })
+
+      const prevData = queryClient.getQueryData<{ data: Deck[] }>(
+        QUERY_KEYS.DECKS,
+      )
+
+      const prevDecks = prevData?.data
+
+      const updatedDecks = findAndRemoveDeck(prevDecks || [], deckID)
+
+      const updatedData = {
+        ...prevData,
+        data: updatedDecks,
+      }
+
+      queryClient.setQueryData([QUERY_KEYS.DECKS], updatedData)
+
+      return { prevData }
+    },
+    onError: (_, __, context) => {
+      queryClient.setQueryData([QUERY_KEYS.DECKS], context?.prevData)
+    },
+    onSuccess() {
+      console.log('Delete deck successfully')
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.DECKS],
+      })
+    },
+  })
+}
+
 export const useChangeParentDeckMutation = () => {
   const queryClient = useQueryClient()
   const { getToken } = useAuth()
@@ -75,7 +163,7 @@ export const useChangeParentDeckMutation = () => {
         QUERY_KEYS.DECKS,
       )
       const prevDecks = prevData ? prevData.data : []
-
+      console.log(prevDecks, parentDeckID, childDeckID)
       return { prevData }
     },
     onSuccess() {
