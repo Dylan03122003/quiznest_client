@@ -75,7 +75,6 @@ export const useChangeParentDeckMutation = () => {
         QUERY_KEYS.DECKS,
       )
       const prevDecks = prevData ? prevData.data : []
-      console.log(prevDecks, parentDeckID, childDeckID)
 
       return { prevData }
     },
@@ -84,3 +83,37 @@ export const useChangeParentDeckMutation = () => {
     },
   })
 }
+
+// function deleteDeck(decks: Deck[], deckID: string): Deck[] {
+//   const updatedDecks: Deck[] = decks.filter((deck) => {
+//     if (deck.deckID === deckID) {
+//       return false // Exclude the deck to delete
+//     }
+
+//     if (deck.childDecks && deck.childDecks.length > 0) {
+//       // Recursively update childDecks
+//       deck.childDecks = deleteDeck(deck.childDecks, deckID)
+//     }
+
+//     return true
+//   })
+
+//   return updatedDecks
+// }
+
+// function getDeckById(decks: Deck[], deckID: string): Deck | undefined {
+//   for (const deck of decks) {
+//     if (deck.deckID === deckID) {
+//       return deck
+//     }
+
+//     if (deck.childDecks && deck.childDecks.length > 0) {
+//       const childDeck = getDeckById(deck.childDecks, deckID)
+//       if (childDeck) {
+//         return childDeck
+//       }
+//     }
+//   }
+
+//   return undefined // Deck not found
+// }

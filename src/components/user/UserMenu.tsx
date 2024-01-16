@@ -2,8 +2,8 @@ import { useMutation } from 'react-query'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { logout } from '../../api/authentication'
-import { setCurrentUser } from '../../slices/auth/authSlice'
-import { User } from '../../slices/auth/authTypes'
+import { setCurrentUser } from '../../slices/authSlice'
+import { User } from '../../types/authTypes'
 import DefaultUserPhoto from './DefaultUserPhoto'
 
 interface Props {

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { getUserInfo, storeUserInfo } from '../../util/localStorageOfUser'
-import { User } from './authTypes'
+import { User } from '../types/authTypes'
+import { getUserInfo, storeUserInfo } from '../util/localStorageOfUser'
 
 interface UserState {
   currentUser: User | null

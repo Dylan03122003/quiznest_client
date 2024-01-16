@@ -1,4 +1,4 @@
-import { User } from '../slices/auth/authTypes'
+import { User } from './authTypes'
 
 export interface Deck {
   deckID: string
