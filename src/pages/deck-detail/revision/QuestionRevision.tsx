@@ -1,4 +1,4 @@
-import { Question, QuestionType } from '../../../types/deckTypes'
+import { Question, QuestionType } from '../../../types/deck.types'
 import FlashCardRevision from './FlashCardRevision'
 import MultipleChoiceRevision from './MultipleChoiceRevision'
 

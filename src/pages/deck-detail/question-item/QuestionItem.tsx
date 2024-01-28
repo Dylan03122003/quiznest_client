@@ -13,8 +13,8 @@ import Overlay from '../../../components/ui/Overlay'
 import {
   useBookmarkQuestionMutation,
   useDeleteQuestionMutation,
-} from '../../../react_query/questions'
-import { Question } from '../../../types/deckTypes'
+} from '../../../react_query/questions.tanstack'
+import { Question } from '../../../types/deck.types'
 import AnswerItem from './AnswerItem'
 import ContentItem from './ContentItem'
 

@@ -7,7 +7,7 @@ import {
   updateCard,
 } from '../api/questions'
 import { StateAfterCreate } from '../components/form/question_form/QuestionForm'
-import { Deck, Question } from '../types/deckTypes'
+import { Deck, Question } from '../types/deck.types'
 
 export const useUpdateCardMutation = (
   oldQuestion: Question,

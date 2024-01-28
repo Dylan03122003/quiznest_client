@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import FlippableCard from '../../components/ui/flippable-card/FlippableCard'
-import { Question } from '../../types/deckTypes'
+import { Question } from '../../types/deck.types'
 import BackQuestionCard from './BackQuestionCard'
 import FrontQuestionCard from './FrontQuestionCard'
 import QuestionPagination from './QuestionPagination'

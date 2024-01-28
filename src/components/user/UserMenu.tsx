@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { logout } from '../../api/authentication'
 import { setCurrentUser } from '../../slices/authSlice'
-import { User } from '../../types/authTypes'
+import { User } from '../../types/user.types'
 import DefaultUserPhoto from './DefaultUserPhoto'
 
 interface Props {

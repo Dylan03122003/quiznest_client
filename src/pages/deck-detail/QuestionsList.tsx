@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Question } from '../../types/deckTypes'
+import { Question } from '../../types/deck.types'
 import QuestionItem from './question-item/QuestionItem'
 
 interface Props {

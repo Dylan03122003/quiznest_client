@@ -8,7 +8,7 @@ import Button from '../../components/ui/Button'
 import EmailField from '../../components/ui/EmailField'
 import TextField from '../../components/ui/TextField'
 import { setCurrentUser } from '../../slices/authSlice'
-import { SignUp } from '../../types/authTypes'
+import { SignUp } from '../../types/user.types'
 
 const SignUpPage = () => {
   const navigate = useNavigate()

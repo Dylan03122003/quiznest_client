@@ -8,7 +8,7 @@ import Button from '../../components/ui/Button'
 import ModernEmailField from '../../components/ui/ModernEmailField'
 import TextField from '../../components/ui/TextField'
 import { setCurrentUser } from '../../slices/authSlice'
-import { LogIn } from '../../types/authTypes'
+import { LogIn } from '../../types/user.types'
 import Logo from './../../assets/img/logo.png'
 
 const LoginPage = () => {

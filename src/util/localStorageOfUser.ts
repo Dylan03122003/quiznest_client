@@ -1,4 +1,4 @@
-import { User } from '../types/authTypes'
+import { User } from '../types/user.types'
 
 const USER_INFO_KEY = 'UserInfoKeyOfQuizNestWeb'
 

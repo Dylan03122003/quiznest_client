@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { QuestionType } from '../../../types/deckTypes'
+import { QuestionType } from '../../../types/deck.types'
 import Tiptap from '../../ui/tiptap/Tiptap'
 import { InputFlashCard, StateAfterCreate } from './QuestionForm'
 

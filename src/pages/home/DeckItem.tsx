@@ -9,12 +9,12 @@ import ConfirmModal from '../../components/ui/ConfirmModal'
 import Overlay from '../../components/ui/Overlay'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
 import { useWindowSize } from '../../hooks/useWindowSize'
-import { useTokenQuery } from '../../react_query/auth'
+import { useTokenQuery } from '../../react_query/auth.tanstack'
 import {
   useDeleteDeckMutation,
   useUpdateDeckTitleMutation,
-} from '../../react_query/deck'
-import { Deck } from '../../types/deckTypes'
+} from '../../react_query/deck.tanstack'
+import { Deck } from '../../types/deck.types'
 
 interface DeckItemProps {
   deck: Deck

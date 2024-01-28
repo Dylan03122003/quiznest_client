@@ -9,7 +9,7 @@ import {
   getDecks,
   updateDeckTitle,
 } from '../api/deck'
-import { Deck } from '../types/deckTypes'
+import { Deck } from '../types/deck.types'
 import { findAndRemoveDeck, findAndUpdateTitle } from '../util/deck'
 
 export const useGetAllDecksQuery = () => {

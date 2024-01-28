@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios'
-import { Question } from '../types/deckTypes'
+import { Question } from '../types/deck.types'
 import { apiInstance } from './config'
 
 export const updateCard = async ({

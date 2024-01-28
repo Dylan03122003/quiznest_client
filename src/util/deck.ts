@@ -1,4 +1,4 @@
-import { Deck } from '../types/deckTypes'
+import { Deck } from '../types/deck.types'
 
 export const findADeck = (decks: Deck[], deckID: string): Deck | null => {
   const deck = decks.find((d) => d.deckID === deckID)

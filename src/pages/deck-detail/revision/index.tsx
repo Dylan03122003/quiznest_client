@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { IoExitOutline } from 'react-icons/io5'
-import { Deck, Question } from '../../../types/deckTypes'
+import { Deck, Question } from '../../../types/deck.types'
 import { RevisionType } from '../DeckDetailPage'
 import ProgressBar from './ProgressBar'
 import QuestionRevision from './QuestionRevision'

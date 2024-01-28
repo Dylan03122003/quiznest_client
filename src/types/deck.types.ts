@@ -1,4 +1,4 @@
-import { User } from './authTypes'
+import { User } from './user.types'
 
 export interface Deck {
   deckID: string

@@ -1,4 +1,4 @@
-import { LogIn, SignUp } from '../types/authTypes'
+import { LogIn, SignUp } from '../types/user.types'
 import { apiInstance } from './config'
 
 export const login = async (loggedInData: LogIn) => {

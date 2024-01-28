@@ -1,5 +1,5 @@
-import { useUpdateCardMutation } from '../../../react_query/questions'
-import { Question, QuestionType } from '../../../types/deckTypes'
+import { useUpdateCardMutation } from '../../../react_query/questions.tanstack'
+import { Question, QuestionType } from '../../../types/deck.types'
 import ClozeCardForm from './ClozeCardForm'
 import FlashCardForm from './FlashCardForm'
 import MultipleChoiceForm from './MultipleChoiceForm'

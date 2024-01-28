@@ -1,4 +1,4 @@
-import { Question, QuestionType } from '../../types/deckTypes'
+import { Question, QuestionType } from '../../types/deck.types'
 import { getOrdinalNumber, parseHTML } from '../../util/others'
 interface Props {
   question: Question

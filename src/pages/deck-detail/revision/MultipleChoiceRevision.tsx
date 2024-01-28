@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { IoMdArrowRoundForward } from 'react-icons/io'
 import Button from '../../../components/ui/Button'
-import { MultipleChoice } from '../../../types/deckTypes'
+import { MultipleChoice } from '../../../types/deck.types'
 import { getOrdinalNumber } from '../../../util/others'
 
 interface Props {

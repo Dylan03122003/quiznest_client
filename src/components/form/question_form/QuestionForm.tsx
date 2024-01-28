@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { QuestionType } from '../../../types/deckTypes'
+import { QuestionType } from '../../../types/deck.types'
 import SelectField from '../../ui/SelectField'
 
-import { useTokenQuery } from '../../../react_query/auth'
-import { useAddQuestionMutation } from '../../../react_query/questions'
+import { useTokenQuery } from '../../../react_query/auth.tanstack'
+import { useAddQuestionMutation } from '../../../react_query/questions.tanstack'
 import ClozeCardForm from './ClozeCardForm'
 import FlashCardForm from './FlashCardForm'
 import MultipleChoiceForm from './MultipleChoiceForm'

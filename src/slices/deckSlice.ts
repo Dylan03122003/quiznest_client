@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
-import { Deck } from '../types/deckTypes'
+import { Deck } from '../types/deck.types'
 
 interface DeckState {
   decks: Deck[]

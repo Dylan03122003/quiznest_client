@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import {
   useChangeParentDeckMutation,
   useGetAllDecksQuery,
-} from '../../react_query/deck'
-import { Deck } from '../../types/deckTypes'
+} from '../../react_query/deck.tanstack'
+import { Deck } from '../../types/deck.types'
 import { containsChildDeck } from '../../util/deck'
 import DeckItem from './DeckItem'
 import DeckListLoading from './DeckListLoading'

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { TiTick } from 'react-icons/ti'
-import { QuestionType } from '../../../types/deckTypes'
+import { QuestionType } from '../../../types/deck.types'
 import Button from '../../ui/Button'
 import TextArea from '../../ui/TextArea'
 import TextField from '../../ui/TextField'
